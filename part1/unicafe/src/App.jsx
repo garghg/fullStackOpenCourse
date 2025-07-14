@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 const Header = ({ text }) =>  <h1>{text}</h1>
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
-const Staticline = ({text, value}) => <button>{text}: {value}</button>
 
 const Stats = ({ good, bad, neutral, total, dataTotal, dataNum}) => {
   if (dataNum === 0){
@@ -14,17 +13,35 @@ const Stats = ({ good, bad, neutral, total, dataTotal, dataNum}) => {
   }else{
     return(
       <div>
-        <Staticline text='Good' value={good}/>
-        <br />
-        <Staticline text='Neutral' value={neutral}/>
-        <br />
-        <Staticline text='Bad' value={bad}/>
-        <br />
-        <Staticline text='Total' value={total}/>
-        <br />
-        <Staticline text='Average Score' value={dataTotal / dataNum}/>
-        <br />
-        <Staticline text='Customer Satisfaction' value={`${(good/dataNum)*100}%`}/>
+        <table>
+          <tbody>
+            <tr>
+              <td>Good</td>
+              <td>{good}</td>
+            </tr>
+            <tr>
+              <td>Neutral</td>
+              <td>{neutral}</td>
+            </tr>
+            <tr>
+              <td>Bad</td>
+              <td>{bad}</td>
+            </tr>
+            <tr>
+              <td>Total Feedback</td>
+              <td>{total}</td>
+            </tr>
+            <tr>
+              <td>Average Score</td>
+              <td>{dataTotal / dataNum}</td>
+            </tr>
+            <tr>
+              <td>Customer Satisfaction</td>
+              <td>{`${(good/dataNum)*100}%`}</td>
+            </tr>
+          </tbody>
+          
+        </table>
       </div>
     )
   }
@@ -61,7 +78,6 @@ const App = () => {
     setTotal(newtotal => newtotal + 1 )
     setScores(prevScores => prevScores.concat(0))
   }
-s
 
 
   return (
