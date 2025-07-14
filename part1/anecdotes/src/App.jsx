@@ -30,15 +30,19 @@ const App = () => {
     });
   }
 
+const mostVoted = () => Object.keys(copy).reduce((a, b) => copy[a] > copy[b] ? a : '');
 
   return (
     <div>
+      <h1>Anecdote of the Day</h1>
       {anecdotes[selected]}
       <br />
       This anecdote has {copy[selected]} votes.
       <br />
       <Button onClick={() => setSelected(x)} text='Generate Anecdote'/>
       <Button onClick={voted} text='Vote for Anecdote'/>
+      <h2>Most Voted Anecdote</h2>
+      {anecdotes[mostVoted()] || 'Vote to see the best anecdote here'}
     </div>
   )
 }
