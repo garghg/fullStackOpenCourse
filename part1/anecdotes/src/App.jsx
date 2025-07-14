@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+const votes = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 }
 
 const App = () => {
   const anecdotes = [
@@ -15,16 +16,29 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [copy, setCopy] = useState({...votes})
+
   let x = Math.floor(Math.random() * anecdotes.length)
   while (x === selected){
     x = Math.floor(Math.random() * anecdotes.length)
   }
 
+  const voted = () => {
+    setCopy({
+      ...copy,
+      [selected]: copy[selected] + 1
+    });
+  }
+
+
   return (
     <div>
       {anecdotes[selected]}
       <br />
+      This anecdote has {copy[selected]} votes.
+      <br />
       <Button onClick={() => setSelected(x)} text='Generate Anecdote'/>
+      <Button onClick={voted} text='Vote for Anecdote'/>
     </div>
   )
 }
