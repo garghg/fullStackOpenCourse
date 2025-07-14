@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
 const Header = ({ text }) =>  <h1>{text}</h1>
-const Button = ({ onClick, text}) => <button onClick={onClick}>{text}</button>
+const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+const Staticline = ({text, value}) => <button>{text}: {value}</button>
 
 const Stats = ({ good, bad, neutral, total, dataTotal, dataNum}) => {
   if (dataNum === 0){
@@ -60,6 +61,7 @@ const App = () => {
     setTotal(newtotal => newtotal + 1 )
     setScores(prevScores => prevScores.concat(0))
   }
+s
 
 
   return (
