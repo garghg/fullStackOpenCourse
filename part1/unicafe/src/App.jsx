@@ -3,6 +3,25 @@ import { useState } from 'react'
 const Header = ({ text }) =>  <h1>{text}</h1>
 const Button = ({ onClick, text}) => <button onClick={onClick}>{text}</button>
 
+const Stats = ({ good, bad, neutral, total, dataTotal, dataNum}) => {
+  return(
+    <div>
+      Good Counter: {good}
+      <br />
+      Neutral Counter: {neutral}
+      <br />
+      Bad Counter: {bad}
+      <br />
+      Total Feedback: {total}
+      <br />
+      Average Score: {isNaN(dataTotal / dataNum) ? 'Not Enough Data' : (dataTotal / dataNum)}
+      <br />
+      {isNaN((good/dataNum)*100) ? '': `${(good/dataNum)*100}% of Customers Liked Unicafe`}
+    </div>
+  )
+}
+
+
 const App = () => {
   const text = 'Unicafe Feedback Collector'
   const [good, setGood] = useState(0)
@@ -43,18 +62,7 @@ const App = () => {
       <Button onClick={badClick} text='Bad'/>
 
       <Header text='Stats'/>
-
-      Good Counter: {good}
-      <br />
-      Neutral Counter: {neutral}
-      <br />
-      Bad Counter: {bad}
-      <br />
-      Total Feedback: {total}
-      <br />
-      Average Score: {isNaN(dataTotal / dataNum) ? 'Not Enough Data' : (dataTotal / dataNum)}
-      <br />
-      {isNaN((good/dataNum)*100) ? '': `${(good/dataNum)*100}% of Customers Liked Unicafe`}
+      <Stats good={good} bad={bad} neutral={neutral} total={total} dataTotal={dataTotal} dataNum={dataNum}/>
     </div>
   )
 }
