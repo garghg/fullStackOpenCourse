@@ -4,21 +4,29 @@ const Header = ({ text }) =>  <h1>{text}</h1>
 const Button = ({ onClick, text}) => <button onClick={onClick}>{text}</button>
 
 const Stats = ({ good, bad, neutral, total, dataTotal, dataNum}) => {
-  return(
-    <div>
-      Good Counter: {good}
-      <br />
-      Neutral Counter: {neutral}
-      <br />
-      Bad Counter: {bad}
-      <br />
-      Total Feedback: {total}
-      <br />
-      Average Score: {isNaN(dataTotal / dataNum) ? 'Not Enough Data' : (dataTotal / dataNum)}
-      <br />
-      {isNaN((good/dataNum)*100) ? '': `${(good/dataNum)*100}% of Customers Liked Unicafe`}
-    </div>
-  )
+  if (dataNum === 0){
+    return(
+      <div>
+        <p>No feedback yet</p>
+      </div>
+    )
+  }else{
+    return(
+      <div>
+        <Staticline text='Good' value={good}/>
+        <br />
+        <Staticline text='Neutral' value={neutral}/>
+        <br />
+        <Staticline text='Bad' value={bad}/>
+        <br />
+        <Staticline text='Total' value={total}/>
+        <br />
+        <Staticline text='Average Score' value={dataTotal / dataNum}/>
+        <br />
+        <Staticline text='Customer Satisfaction' value={`${(good/dataNum)*100}%`}/>
+      </div>
+    )
+  }
 }
 
 
