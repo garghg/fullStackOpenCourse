@@ -6,13 +6,19 @@ const Part = (props) => (
   </p>
 )
 
-const Content = (props) => (
-  <div>
-    <Part part={props.parts[0]} />
-    <Part part={props.parts[1]} />
-    <Part part={props.parts[2]} />
-  </div>
-)
+const Content = ({ parts }) => {
+
+  const partComponents = parts.map((x) => {
+    return <Part key={x.id} part={x} />
+  })
+  
+  return (
+    <>
+      {partComponents}
+    </>
+  )
+
+}
 
 const Total = ({ parts }) => {
   const totalEx = parts.reduce((acc, item) => {
@@ -38,21 +44,25 @@ const Course = ({ course }) => {
 
 const App = () => {
   const course = {
+    id: 1,
     name: 'Half Stack application development',
     parts: [
       {
         name: 'Fundamentals of React',
         exercises: 10,
+        id: 1
       },
       {
         name: 'Using props to pass data',
         exercises: 7,
+        id: 2
       },
       {
         name: 'State of a component',
         exercises: 14,
-      },
-    ],
+        id: 3
+      }
+    ]
   }
 
   return (
