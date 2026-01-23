@@ -15,8 +15,7 @@ const App = () => {
     numberServices
       .getAll()
       .then(initialNumbers => {
-        console.log(initialNumbers)
-        setNewNumber(initialNumbers)
+        setPersons(initialNumbers)
       })
   }, [])
 
@@ -33,8 +32,8 @@ const App = () => {
     } else {
       numberServices
         .create(newNumObj)
-        .then(returnedNums => {
-          setPersons(persons.concat(returnedNums))    
+        .then(returnedNum => {
+          setPersons(persons.concat(returnedNum))    
           setNewName('')
           setNewNumber('')
         })
