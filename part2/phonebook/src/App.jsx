@@ -18,6 +18,14 @@ const App = () => {
       })
   }, [])
 
+  const updateContact = (target) => {
+    if (window.confirm(`${newName} is already in the phonebook. Update number?`)) {
+      numberServices.update(target.id, {...target, number: newNumber}).then(returnedPersons=> {
+        setPersons(persons.map(person => person.id === target.id ? returnedPersons : person))
+      })
+    }
+  }
+
   const addName = (event) => {
     event.preventDefault()
     
@@ -26,8 +34,9 @@ const App = () => {
       number: newNumber === '' ? "No number" : newNumber
     }
 
-  if (persons.some(person => person.name === newName.trim())) {
-      alert(`${newName.trim()} is already added to the phonebook.`)
+    if (persons.some(person => person.name === newName.trim())) {
+      const person = persons.find(person => person.name === newName.trim())
+      updateContact(person)
     } else {
       numberServices
         .create(newNumObj)
