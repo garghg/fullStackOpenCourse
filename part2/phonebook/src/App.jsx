@@ -3,7 +3,6 @@ import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonsForm from './components/PersonsForm'
 import numberServices from './services/number'
-import number from './services/number'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -62,6 +61,13 @@ const App = () => {
     }
   }
 
+  const handleDel = (name, id) => {
+    if (window.confirm(`Delete ${name}?`)){
+      numberServices.delNum(id)
+      setPersons(prev => prev.filter(item => item.id !== id))
+    }
+  }
+
 
   return (
     <div>
@@ -70,7 +76,7 @@ const App = () => {
       <h2>Add a Contact</h2>
       <PersonsForm addName={addName} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-      <Persons arr={filterArray(searchResults)}/>
+      <Persons arr={filterArray(searchResults)} handleDel={handleDel}/>
     </div>
   )
 }
