@@ -2,29 +2,28 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonsForm from './components/PersonsForm'
-import axios from 'axios'
-
-
+import numberServices from './services/number'
+import number from './services/number'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchVal, setSearchVal] = useState('')
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response => {
-        setPersons(response.data)
+    numberServices
+      .getAll()
+      .then(initialNumbers => {
+        console.log(initialNumbers)
+        setNewNumber(initialNumbers)
       })
   }, [])
 
   const addName = (event) => {
     event.preventDefault()
     
-    const nameObj = {
+    const newNumObj = {
       name: newName,
       number: newNumber === '' ? "No number" : newNumber
     }
@@ -32,9 +31,13 @@ const App = () => {
   if (persons.some(person => person.name === newName.trim())) {
       alert(`${newName.trim()} is already added to the phonebook.`)
     } else {
-      setPersons(persons.concat(nameObj))
-    setNewName('')
-    setNewNumber('')
+      numberServices
+        .create(newNumObj)
+        .then(returnedNums => {
+          setPersons(persons.concat(returnedNums))    
+          setNewName('')
+          setNewNumber('')
+        })
     } 
   }
 
