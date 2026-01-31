@@ -1,29 +1,13 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const Button = ({ text, onClick }) => <button onClick={onClick}>{text}</button>
 
-const CountryList = ({ country, countriesData }) => {
-    const [show, setShow] = useState(false)
-
-    const handleShow = () => {
-        const updatedShow = !show
-        setShow(updatedShow)
-        return updatedShow
-    }
-
-    if (show) {
-        return (
-            <div>
-                <ShowCountry countriesData={countriesData} selectedCountry={country}/>
-            </div>
-        )
-    } else {
-        return (
+const CountryList = ({ country, selectCountry }) => {
+    return (
         <div>
-            <p>{country}<Button text={'Show'} onClick={handleShow}/></p>
+            <p>{country}<Button text={'Show'} onClick={() => selectCountry(country)}/></p>
         </div>
         )
-    }
 }
 
 const ShowCountry = ({ countriesData, selectedCountry }) => {
@@ -50,16 +34,28 @@ const ShowCountry = ({ countriesData, selectedCountry }) => {
 
 const Countries = ({ countries, countriesData }) => {
 
+    const [selected, setSelected] = useState(null)
+
+    const handleSelect = (selectedCountry) => {
+        setSelected(selectedCountry)
+    }
+
+    useEffect(() => {
+        setSelected(null)
+    }, [countries])
+
     if (countries.length >= 10) {
         return (
             <div>
                 Too many countries; Please be more specific.
             </div>
         )
+    } else if (selected != null) {
+        return <ShowCountry countriesData={countriesData} selectedCountry={selected}/>
     } else {
         return (
         <div>
-            {countries.map(country => <CountryList country={country} key={country} countriesData={countriesData}/>)}
+            {countries.map(country => <CountryList country={country} key={country} selectCountry={handleSelect}/>)}
         </div>
     )
     }
