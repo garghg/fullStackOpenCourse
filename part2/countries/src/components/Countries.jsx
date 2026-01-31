@@ -6,9 +6,16 @@ const CountryList = ({ country }) => {
     )
 }
 
-const Country = ({ flag }) => {
+const Country = ({ name, flag, capital, area, languages }) => {
     return (
         <div>
+            <h1>{name}</h1>
+            <p>Capital: {capital}</p>
+            <p>Area: {area}</p>
+            <h2>Languages</h2>
+            <ul>
+                {languages.map(language => (<li>{language}</li>))}
+            </ul>
             <img src={flag} alt="Flag" />
         </div>
     )
@@ -25,9 +32,13 @@ const Countries = ({ countries, countriesData }) => {
     } else if (countries.length === 1) {
         const country = countriesData.filter(country => country.name.common === countries[0])[0]
         const flag = country.flags.png
+        const name = country.name.common
+        const capital = country.capital[0]
+        const area = country.area
+        const languagesArr = Object.values(country.languages)
         return (
             <div>
-                <Country flag={flag}/>
+                <Country name={name} flag={flag} capital={capital} area={area} languages={languagesArr}/>
             </div>
         )
     } else {
