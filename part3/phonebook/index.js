@@ -59,7 +59,7 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 const generateId = () => {
-    Math.floor(Math.random() * 999999) + 1000
+    return Math.floor(Math.random() * 999999) + 1000
 }
 
 app.post('/api/persons', (request, response) => {
@@ -71,10 +71,24 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
+    if (!body.number) {
+        return response.status(400).json({
+            error: 'contact number missing'
+        })
+    }
+
+    const duplicate = contacts.find(contact => contact.name === body.name)
+
+    if (duplicate) {
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+
     const contact = {
         id: generateId(),
         name: body.name,
-        number: body.number || 'no number'
+        number: body.number
     }
 
     contacts = contacts.concat(contact)
