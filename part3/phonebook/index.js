@@ -3,6 +3,7 @@ const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
 
+app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
 
@@ -15,7 +16,6 @@ morgan.token('content', function getContent(request, response) {
 })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
-app.use(cors())
 
 
 let contacts = [
