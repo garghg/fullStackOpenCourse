@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const Contact = require('./models/contact')
+const note = require('../../lessons/notes_backend/models/note')
 
 const app = express()
 
@@ -17,8 +18,6 @@ morgan.token('content', function getContent(request, response) {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 
-
-let contacts = []
 
 app.get('/', (request, response) => {
     response.send('Test')
@@ -42,11 +41,12 @@ app.get('/api/persons/:id', (request, response) => {
     })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    contacts = contacts.filter(contact => contact.id !== id)
-
-    response.status(204).end()
+app.delete('/api/persons/:id', (request, response, next) => {
+    Contact.findByIdAndDelete(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
@@ -73,6 +73,13 @@ app.post('/api/persons', (request, response) => {
         response.json(savedContact)
     })
 })
+
+const errorHandler = (error, request, response, next) => {
+    consolo.log(error)
+    next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
