@@ -78,8 +78,40 @@ app.post('/api/persons', (request, response, next) => {
         .then((savedContact) => {
             response.json(savedContact)
         })
+        .catch(error => {
+            
+            if (error.code === 11000) {
+                // update contact now...
+            }
+
+            next(error)
+        })
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+    const { name, number } = request.body
+
+    Contact.findById(request.params.id)
+        .then(contact => {
+            if (!contact) {
+                return response.status(404).end()
+            }
+
+            contact.name = name
+            contact.number = number
+
+            return contact.save().then(updatedContact => {
+                response.json(updatedContact)
+            })
+        })
         .catch(error => next(error))
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
