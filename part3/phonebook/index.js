@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const Contact = require('./models/contact')
-const note = require('../../lessons/notes_backend/models/note')
 
 const app = express()
 
@@ -36,7 +35,7 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
-    Contact.findbyID(request.params.id)
+    Contact.findById(request.params.id)
         .then(contact => {
             response.json(contact)
         })
@@ -58,6 +57,18 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.post('/api/persons', (request, response, next) => {
     const body = request.body
 
+    if (!body.name) {
+        return response.status(400).json({
+            error: 'contact name missing'
+        })
+    }
+
+    if (!body.number) {
+        return response.status(400).json({
+            error: 'contact number missing'
+        })
+    }
+
     const contact = new Contact({
         name: body.name,
         number: body.number
@@ -67,25 +78,21 @@ app.post('/api/persons', (request, response, next) => {
         .then((savedContact) => {
             response.json(savedContact)
         })
-        .catch(next(error))
+        .catch(error => next(error))
 })
 
 const errorHandler = (error, request, response, next) => {
-    consolo.log(error)
+  console.error(error.message)
 
-    if (!request.body.name) {
-        return response.status(400).json({
-            error: 'contact name missing'
-        })
-    }
+  if (error.name === 'CastError') {
+    return response.status(400).json({ error: 'malformatted id' })
+  }
 
-    if (!request.body.number) {
-        return response.status(400).json({
-            error: 'contact number missing'
-        })
-    }
+  if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
 
-    next(error)
+  next(error)
 }
 
 app.use(errorHandler)
