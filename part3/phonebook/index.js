@@ -28,10 +28,13 @@ app.get('/api/persons', (request, response) => {
     })
 })
 
-app.get('/info', (request, response) => {
-    const total_contacts= contacts.length
+app.get('/info', (request, response, next) => {
     const now = new Date().toString();
-    response.send(`Phonebook has info for ${total_contacts} people<br>${now}`)
+    Contact.countDocuments()
+        .then(total => {
+            response.send(`Phonebook has info for ${total} people<br>${now}`)
+        })
+        .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
