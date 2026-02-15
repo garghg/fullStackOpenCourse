@@ -35,47 +35,56 @@ app.get('/info', (request, response) => {
     response.send(`Phonebook has info for ${total_contacts} people<br>${now}`)
 })
 
-app.get('/api/persons/:id', (request, response) => {
-    Contact.findbyID(request.params.id).then(contact => {
-        response.json(contact)
-    })
-})
-
-app.delete('/api/persons/:id', (request, response, next) => {
-    Contact.findByIdAndDelete(request.params.id)
-        .then(result => {
-            response.status(204).end()
+app.get('/api/persons/:id', (request, response, next) => {
+    Contact.findbyID(request.params.id)
+        .then(contact => {
+            response.json(contact)
         })
         .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
+    Contact.findByIdAndDelete(request.params.id)
+        .then(note => {
+            if (note) {
+                response.json(note)
+            } else {
+                response.status(404).end()
+            }
+        })
+        .catch(error => next(error))
+})
+
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
-
-    if (!body.name) {
-        return response.status(400).json({
-            error: 'contact name missing'
-        })
-    }
-
-    if (!body.number) {
-        return response.status(400).json({
-            error: 'contact number missing'
-        })
-    }
 
     const contact = new Contact({
         name: body.name,
         number: body.number
     })
 
-    contact.save().then((savedContact) => {
-        response.json(savedContact)
-    })
+    contact.save()
+        .then((savedContact) => {
+            response.json(savedContact)
+        })
+        .catch(next(error))
 })
 
 const errorHandler = (error, request, response, next) => {
     consolo.log(error)
+
+    if (!request.body.name) {
+        return response.status(400).json({
+            error: 'contact name missing'
+        })
+    }
+
+    if (!request.body.number) {
+        return response.status(400).json({
+            error: 'contact number missing'
+        })
+    }
+
     next(error)
 }
 
