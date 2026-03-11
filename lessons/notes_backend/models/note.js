@@ -1,11 +1,3 @@
-
-
-
-// before you start continue reading claude's last TWO messages and understand the sturcture.
-
-
-
-
 const mongoose = require('mongoose')
 
 const noteSchema = new mongoose.Schema({
