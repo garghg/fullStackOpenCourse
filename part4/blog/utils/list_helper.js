@@ -1,6 +1,4 @@
-const blog = require('../models/blog')
-const Blog = require('../models/blog')
-
+const lodash = require('lodash');
 
 const dummy = (blogs) => {
   return 1
@@ -16,6 +14,10 @@ const favoriteBlog = (blogs) => {
   return blogs.reduce((mostLiked, blog) =>
     blog.likes > mostLiked.likes ? blog : mostLiked
   )
+}
+
+const mostBlogs = (blogs) => {
+  // return author with most blogs
 }
 
 module.exports = { dummy, totalLikes, favoriteBlog }
