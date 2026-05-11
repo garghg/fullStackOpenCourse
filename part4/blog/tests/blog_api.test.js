@@ -37,6 +37,7 @@ test('post a valid blog', async () => {
     const newBlog = {
         title: "Node.js Best Practices: Part 2",
         author: "Michael Brown II",
+        url: "www.example.com",
         blogs: 1,
         likes: 15
     }
@@ -58,6 +59,7 @@ test('default likes to 0', async () => {
     const newBlog = {
         title: "Node.js Best Practices: Part 3",
         author: "Michael Brown III",
+        url: "www.example.com",
         blogs: 1,
     }
     await api
@@ -67,6 +69,26 @@ test('default likes to 0', async () => {
     const response = await api.get('/api/blogs')
     const blogs = response.body
     assert.strictEqual(blogs[blogs.length - 1].likes, 0);
+
+})
+
+test('cannot add invalid blog', async () => {
+    const newBlog = {
+        title: "Node.js Best Practices: Part 4",
+        author: "Michael Brown IV",
+        blogs: 1,
+        likes: 2
+    }
+
+    const response_status = await api
+        .post('/api/blogs')
+        .send(newBlog)
+
+    assert.strictEqual(response_status.status, 400)
+    
+    const response = await api.get('/api/blogs')
+    const blogs = response.body
+    assert.strictEqual(blogs.length, helper.initialBlogs.length);
 
 })
 
