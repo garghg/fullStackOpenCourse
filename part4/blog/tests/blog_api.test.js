@@ -92,6 +92,28 @@ test('cannot add invalid blog', async () => {
 
 })
 
+test('delete blog', async () => {
+    const newBlog = {
+        title: "Next.js Tips and Tricks",
+        author: "Michelle Brown",
+        url: "www.example.com",
+        blogs: 1,
+        likes: 20
+    }
+    const response = await api
+        .post('/api/blogs')
+        .send(newBlog)
+    
+    const del_id = response.body.id
+    await api.delete(`/api/blogs/${del_id}`)
+
+    const blogsAtEnd = await api.get('/api/blogs')
+    blogsAtEnd.body.forEach(blog => {
+        assert(blog.id != del_id)
+    })
+    assert.strictEqual(blogsAtEnd.body.length, helper.initialBlogs.length);
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
