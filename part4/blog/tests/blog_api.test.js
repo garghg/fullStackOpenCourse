@@ -54,6 +54,22 @@ test('post a valid blog', async () => {
     assert(contents.includes(newBlog.title));
 })
 
+test('default likes to 0', async () => {
+    const newBlog = {
+        title: "Node.js Best Practices: Part 3",
+        author: "Michael Brown III",
+        blogs: 1,
+    }
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+    
+    const response = await api.get('/api/blogs')
+    const blogs = response.body
+    assert.strictEqual(blogs[blogs.length - 1].likes, 0);
+
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
