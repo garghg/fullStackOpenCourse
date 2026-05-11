@@ -25,12 +25,33 @@ test('get all blogs', async () => {
     assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
-test('check id name for all blogs', async () => {
+test('id name for all blogs', async () => {
     const response = await api.get('/api/blogs')
     response.body.forEach(blog => {
         assert(blog.id);
         assert(!blog._id);
     })
+})
+
+test('post a valid blog', async () => {
+    const newBlog = {
+        title: "Node.js Best Practices: Part 2",
+        author: "Michael Brown II",
+        blogs: 1,
+        likes: 15
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+    
+    const contents = blogsAtEnd.map(blog => blog.title)
+    assert(contents.includes(newBlog.title));
 })
 
 after(async () => {
