@@ -16,8 +16,9 @@ const favoriteBlog = (blogs) => {
   )
 }
 
-const mostBlogs = (blogs) => {
-  // return author with most blogs
-}
+const mostBlogs = blogs => lodash.maxBy(blogs, "blogs")
 
-module.exports = { dummy, totalLikes, favoriteBlog }
+const mostLikes = blogs => lodash.maxBy(blogs, "likes")
+
+module.exports = { dummy, totalLikes, 
+                  favoriteBlog, mostBlogs, mostLikes }
