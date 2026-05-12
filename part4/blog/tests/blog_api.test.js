@@ -114,6 +114,35 @@ test('delete blog', async () => {
     assert.strictEqual(blogsAtEnd.body.length, helper.initialBlogs.length);
 })
 
+
+test('update blog', async () => {
+    const newBlog = {
+        title: "Next.js Tips and Tricks",
+        author: "Michelle Brown",
+        url: "www.example.com",
+        blogs: 1,
+        likes: 20
+    }
+    const response = await api
+        .post('/api/blogs')
+        .send(newBlog)
+    
+    const newLikes = 21
+    const blogId = response.body.id
+
+    await api
+        .put(`/api/blogs/${blogId}`)
+        .send({ likes: newLikes })
+
+    const blogsAtEnd = await api.get('/api/blogs')
+    blogsAtEnd.body.forEach(blog => {
+        if (blog.id === blogId) {
+            assert.strictEqual(blog.likes, newLikes)
+        }
+    })
+})
+
+
 after(async () => {
   await mongoose.connection.close()
 })
