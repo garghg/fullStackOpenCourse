@@ -5,6 +5,12 @@ const User = require('../models/user')
 userRouter.post('/', async (request, response) => {
     const { username, name, password } = request.body
 
+    if (!password || password.length < 3) {
+        const error = new Error('invalid password')
+        error.name = 'PasswordError'
+        throw error
+    }
+
     const saltRounds = 10
     const passwordHash = await bcrpyt.hash(password, saltRounds);
 
