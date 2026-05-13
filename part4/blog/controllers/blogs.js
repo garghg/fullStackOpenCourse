@@ -8,17 +8,12 @@ blogRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
-
 blogRouter.post('/', async (request, response) => {
   const body = request.body
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  if (!request.token) {
+    return response.status(401).json({ error: 'token not given' })
+  }
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
   
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'invalid token' })
@@ -49,7 +44,30 @@ blogRouter.post('/', async (request, response) => {
 })
 
 blogRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndDelete(request.params.id)
+  const body = request.body
+  if (!request.token) {
+    return response.status(401).json({ error: 'token not given' })
+  }
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'invalid token' })
+  }
+  
+  const user = await User.findById(decodedToken.id) 
+
+  if (!user) {
+    return response.status(400).json({ error: 'Invalid userId' })
+  }
+
+  const target = await Blog.findById(request.params.id)
+  if (!target) {
+    return response.status(404).json({ error: 'blog not found' })
+  }
+  if (target.user.toString() !== user._id.toString()) {
+    return response.status(401).json({ error: 'Delete access not granted' })
+  }
+  await target.deleteOne()
   response.status(204).end()
 })
 
