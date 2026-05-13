@@ -11,7 +11,11 @@ const api = supertest(app)
 describe('invalid input', () => {
     beforeEach(async () => {
         await User.deleteMany({})
-        await User.insertMany(helper.initialUsers)
+        for (const user of helper.initialUsers) {
+            await api
+                .post('/api/users')
+                .send(user)
+        }
     })
 
     const invalid_check = async (newUser) => {

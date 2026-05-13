@@ -5,12 +5,20 @@ const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
 
 const api = supertest(app)
 
 beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
+    await User.deleteMany({})
+    for (const user of helper.initialUsers) {
+        await api
+            .post('/api/users')
+            .send(user)
+    }
 })
 
 test('get blogs as json', async () => {
@@ -42,8 +50,13 @@ test('post a valid blog', async () => {
         likes: 15
     }
 
+    const loginResponse = await api
+        .post('/api/login')
+        .send({ username: 'admin', password: 'admin123' })
+
     await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${loginResponse.body.token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -62,17 +75,50 @@ test('default likes to 0', async () => {
         url: "www.example.com",
         blogs: 1,
     }
+
+    const loginResponse = await api
+        .post('/api/login')
+        .send({ username: 'admin', password: 'admin123' })
+
     await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${loginResponse.body.token}`)
         .send(newBlog)
+        .expect(201)
+
+    const response = await api.get('/api/blogs')
+    const blogs = response.body
+    const created = blogs.find(b => b.title === newBlog.title)
+    assert.strictEqual(created.likes, 0)
+})
+
+
+test('cannot add invalid blog', async () => {
+    const newBlog = {
+        title: "Node.js Best Practices: Part 4",
+        author: "Michael Brown IV",
+        blogs: 1,
+        likes: 2
+    }
+
+    const loginResponse = await api
+        .post('/api/login')
+        .send({ username: 'admin', password: 'admin123' })
+
+    const response_status = await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${loginResponse.body.token}`)
+        .send(newBlog)
+
+    assert.strictEqual(response_status.status, 400)
     
     const response = await api.get('/api/blogs')
     const blogs = response.body
-    assert.strictEqual(blogs[blogs.length - 1].likes, 0);
+    assert.strictEqual(blogs.length, helper.initialBlogs.length)
 
 })
 
-test('cannot add invalid blog', async () => {
+test('unauthorized access', async () => {
     const newBlog = {
         title: "Node.js Best Practices: Part 4",
         author: "Michael Brown IV",
@@ -84,12 +130,11 @@ test('cannot add invalid blog', async () => {
         .post('/api/blogs')
         .send(newBlog)
 
-    assert.strictEqual(response_status.status, 400)
+    assert.strictEqual(response_status.status, 401)
     
     const response = await api.get('/api/blogs')
     const blogs = response.body
-    assert.strictEqual(blogs.length, helper.initialBlogs.length);
-
+    assert.strictEqual(blogs.length, helper.initialBlogs.length)
 })
 
 test('delete blog', async () => {
