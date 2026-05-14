@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './index.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +12,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
+  const [alert, setAlert] = useState(null)
   
 
   useEffect(() => {
@@ -41,7 +43,13 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch {
-      console.log('Invalid username or password')
+      setAlert({
+        message: 'Invalid username or password',
+        type: 'error'
+      })
+      setTimeout(() => {
+        setAlert(null)
+      }, 5000)
     }
     
   }
@@ -86,7 +94,21 @@ const App = () => {
       author,
       url
     }
-    blogService.create(newBlog)
+    const response = blogService.create(newBlog)
+    if (response) {
+      setAlert({
+        message: `Added ${title}`,
+        type: 'success'
+      })
+    } else {
+      setAlert({
+        message: 'Something went wrong',
+        type: 'error'
+      })
+    }
+    setTimeout(() => {
+        setAlert(null)
+      }, 5000)
     setBlogs(blogs.concat(newBlog))
     setTitle('')
     setUrl('')
@@ -134,6 +156,11 @@ const App = () => {
 
   return (
     <div>
+      {alert &&
+        <div className={alert.type}>
+          {alert.message}
+        </div>
+      }
       {!user && loginForm()}
       {user && (
         <div>
