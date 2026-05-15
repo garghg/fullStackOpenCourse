@@ -1,7 +1,31 @@
-const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>  
-)
+import Togglable from "./Togglable"
+
+const Blog = ({ blog }) => {
+
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingBottom: 10,
+    border: 'solid',
+    borderWidth: 2,
+    marginBottom: 5
+
+  }
+
+  return (
+    <div style={blogStyle}>
+      {blog.title}
+      <Togglable showLabel="Show Details" hideLabel="Hide">
+        {blog.url}
+        <br />
+        {blog.likes}
+        <button>Like</button>
+        <br />
+        {blog.author}
+        <br />
+      </Togglable>
+    </div>
+  )
+}
 
 export default Blog

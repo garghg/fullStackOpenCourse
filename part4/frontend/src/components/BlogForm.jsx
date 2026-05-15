@@ -39,7 +39,7 @@ const BlogForm = ({ setAlert, setBlogs, blogs }) => {
     }
 
     return (
-        <Togglable buttonLabel={"Create new blog"} ref={blogFormRef}>
+        <Togglable showLabel={"Create new blog"} ref={blogFormRef}>
             <form onSubmit={addBlog}>
                 <div>
                     <label>
