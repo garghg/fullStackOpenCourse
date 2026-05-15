@@ -47,10 +47,6 @@ const App = () => {
       }
       {user && (
         <div>
-          <h2>blogs</h2>
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
-          )}
           <h2>
             Add New Blog
           </h2>
@@ -61,7 +57,12 @@ const App = () => {
               blogs={blogs}
             />
           }
-          <br />
+          <h2>blogs</h2>
+          {blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} />
+          )}
+          <h3>Current User</h3>
+          {user.name}
           <button onClick={logout}>logout</button>
         </div>
       )}
