@@ -1,6 +1,6 @@
-import Togglable from "./Togglable"
-import LikeButton from "./LikeButton"
-import DelButton from "./delButton"
+import Togglable from './Togglable'
+import LikeButton from './LikeButton'
+import DelButton from './delButton'
 
 const Blog = ({ user, blog, blogs, setBlogs }) => {
 
@@ -26,7 +26,7 @@ const Blog = ({ user, blog, blogs, setBlogs }) => {
         {blog.author}
         <br />
         {
-          blog.user.id === user.id && 
+          blog.user.id === user.id &&
           <DelButton blogs={blogs} id={blog.id} setBlogs={setBlogs} />
         }
       </Togglable>
