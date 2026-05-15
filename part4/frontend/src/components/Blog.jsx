@@ -1,7 +1,7 @@
 import Togglable from "./Togglable"
 import LikeButton from "./LikeButton"
 
-const Blog = ({ blog, setBlogs }) => {
+const Blog = ({ blog, blogs, setBlogs }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -20,7 +20,7 @@ const Blog = ({ blog, setBlogs }) => {
         {blog.url}
         <br />
         {blog.likes}
-        <LikeButton blog={blog} setBlogs={setBlogs} />
+        <LikeButton blog={blog} blogs={blogs} setBlogs={setBlogs} />
         <br />
         {blog.author}
         <br />
