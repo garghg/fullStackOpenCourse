@@ -36,7 +36,6 @@ blogRouter.post('/', userExtractor, async (request, response) => {
 })
 
 blogRouter.delete('/:id', userExtractor, async (request, response) => {
-  const body = request.body
   const user = request.user
 
   if (!user) {

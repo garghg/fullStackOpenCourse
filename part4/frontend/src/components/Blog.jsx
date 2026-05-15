@@ -1,7 +1,8 @@
 import Togglable from "./Togglable"
 import LikeButton from "./LikeButton"
+import DelButton from "./delButton"
 
-const Blog = ({ blog, blogs, setBlogs }) => {
+const Blog = ({ user, blog, blogs, setBlogs }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -24,6 +25,10 @@ const Blog = ({ blog, blogs, setBlogs }) => {
         <br />
         {blog.author}
         <br />
+        {
+          blog.user.id === user.id && 
+          <DelButton blogs={blogs} id={blog.id} setBlogs={setBlogs} />
+        }
       </Togglable>
     </div>
   )
