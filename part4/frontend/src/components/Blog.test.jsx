@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('blog element checks', () => {
@@ -21,15 +22,28 @@ describe('blog element checks', () => {
   test('blog title rendering', () => {
     screen.getByText('React Testing Library')
   })
+
   test('blog author rendering', () => {
     screen.getByText('Haardik Garg')
   })
+
   test('blog url not rendering', () => {
     const element = screen.queryByText('www.example.com')
     expect(element).not.toBeVisible()
   })
+
   test('blog likes not rendering', () => {
     const element = screen.queryByText('0')
     expect(element).not.toBeVisible()
+  })
+
+  test('url shows after details button', async () => {
+    const user = userEvent.setup()
+    const button = screen.getByText('Show Details')
+    await user.click(button)
+
+    screen.getByText('www.example.com')
+    screen.getByText('0')
+
   })
 })
