@@ -16,14 +16,20 @@ const Blog = ({ user, blog, blogs, setBlogs }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title}
+      <div>
+        {blog.title}
+      </div>
+      <br />
+      <div>
+        {blog.author}
+      </div>
       <Togglable showLabel="Show Details" hideLabel="Hide">
         {blog.url}
         <br />
-        {blog.likes}
+        <div id='likes'>
+          {blog.likes}
+        </div>
         <LikeButton blog={blog} blogs={blogs} setBlogs={setBlogs} />
-        <br />
-        {blog.author}
         <br />
         {
           blog.user.id === user.id &&
