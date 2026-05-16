@@ -24,7 +24,9 @@ const Blog = ({ user, blog, blogs, setBlogs }) => {
         {blog.author}
       </div>
       <Togglable showLabel="Show Details" hideLabel="Hide">
-        {blog.url}
+        <div>
+          {blog.url}
+        </div>
         <br />
         <div id='likes'>
           {blog.likes}
