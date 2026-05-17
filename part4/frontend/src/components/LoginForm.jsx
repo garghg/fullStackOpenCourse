@@ -33,7 +33,7 @@ const LoginForm = ({ setUser, setAlert }) => {
     <form onSubmit={handleLogin}>
       <div>
         <label>
-                username
+          username
           <input
             type="text"
             value={username}
@@ -43,9 +43,9 @@ const LoginForm = ({ setUser, setAlert }) => {
       </div>
       <div>
         <label>
-                password
+          password
           <input
-            type="text"
+            type="password"
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />
@@ -55,6 +55,7 @@ const LoginForm = ({ setUser, setAlert }) => {
         <button type="submit">Login</button>
       </div>
     </form>
-  )}
+  )
+}
 
 export default LoginForm
