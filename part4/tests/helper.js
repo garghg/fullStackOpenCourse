@@ -13,6 +13,7 @@ const addInitialBlog = async (page, title, url, author) => {
     await page.getByPlaceholder('Enter Blog Author')
         .fill(author)
     await page.getByRole('button', { name: 'Add Blog' }).click()
+    await page.getByText(title, { exact: true }).waitFor()
 }
 
 export { loginHelper, addInitialBlog }

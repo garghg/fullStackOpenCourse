@@ -95,6 +95,55 @@ describe('Blog app', () => {
                 await expect(page.getByRole('button',
                     { name: 'Delete' })).not.toBeVisible()
             })
+
+            test('blogs are in like order', async ({ page }) => {
+                await addInitialBlog(
+                    page,
+                    'Another blog from testing',
+                    'www.example.com',
+                    'Haardik Garg'
+                )
+                await addInitialBlog(
+                    page,
+                    'One more blog from testing',
+                    'www.example.com',
+                    'Haardik Garg'
+                )
+
+                await page.pause()
+
+                await page
+                    .getByRole('button', { name: 'Show Details' })
+                    .nth(1)
+                    .click()
+                await page.getByRole('button', { name: 'Like' }).click()
+                await page.locator('#likes').getByText('1').waitFor()
+                await page.getByRole('button', { name: 'Like' }).click()
+                await page.locator('#likes').getByText('2').waitFor()
+                await page.getByRole('button', { name: 'Hide' }).click()
+
+                await page
+                    .getByRole('button', { name: 'Show Details' })
+                    .nth(2)
+                    .click()
+                await page.getByRole('button', { name: 'Like' }).click()
+                await page.locator('#likes').getByText('1').waitFor()
+                await page.getByRole('button', { name: 'Hide' }).click()
+
+                const another = await page
+                    .getByText('Another blog from testing', { exact: true })
+                    .boundingBox()
+                const oneMore = await page
+                    .getByText('One more blog from testing', { exact: true })
+                    .boundingBox()
+                const adding = await page
+                    .getByText('Adding blog from testing', { exact: true })
+                    .boundingBox()
+
+                expect(another.y).toBeLessThan(oneMore.y)
+                expect(oneMore.y).toBeLessThan(adding.y)
+
+            })
         })
     })
 })
