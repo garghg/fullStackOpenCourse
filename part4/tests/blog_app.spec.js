@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginHelper } = require('./helper')
+const { loginHelper , addInitialBlog} = require('./helper')
 const { execPath } = require('node:process')
 
 describe('Blog app', () => {
@@ -42,19 +42,19 @@ describe('Blog app', () => {
         })
 
         test('a new blog can be created', async ({ page }) => {
-            await page.getByRole('button', { name: 'Create new blog' }).click()
-            await page.getByPlaceholder('Enter Blog Title')
-                        .fill('Adding blog from testing')
-            await page.getByPlaceholder('Enter Blog URL')
-                        .fill('www.example.com')
-            await page.getByPlaceholder('Enter Blog Author')
-                        .fill('Haardik Garg')
-            await page.getByRole('button', { name: 'Add Blog' }).click()
+            await addInitialBlog(page)
             const successDiv = page.locator('.success')
             await expect(successDiv).toContainText('Added Adding blog from testing')
-            page.pause()
             await expect(page.getByText('Adding blog from testing', { exact: true })).toBeVisible()
             await expect(page.getByText("Haardik Garg")).toBeVisible()
+        })
+
+        test('a blog can be liked', async ({ page }) => {
+            await addInitialBlog(page)
+            await page.getByRole('button', { name: 'Show Details' }).click()
+            await page.getByRole('button', { name: 'Like' }).click()
+            const likeDiv = page.locator('#likes')
+            await expect(likeDiv).toContainText('1');
         })
     })
 })
