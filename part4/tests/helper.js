@@ -4,14 +4,14 @@ const loginHelper = async (page, username, password) => {
     await page.getByRole('button', { name: 'Login' }).click()
 }
 
-const addInitialBlog = async page => {
+const addInitialBlog = async (page, title, url, author) => {
     await page.getByRole('button', { name: 'Create new blog' }).click()
     await page.getByPlaceholder('Enter Blog Title')
-        .fill('Adding blog from testing')
+        .fill(title)
     await page.getByPlaceholder('Enter Blog URL')
-        .fill('www.example.com')
+        .fill(url)
     await page.getByPlaceholder('Enter Blog Author')
-        .fill('Haardik Garg')
+        .fill(author)
     await page.getByRole('button', { name: 'Add Blog' }).click()
 }
 

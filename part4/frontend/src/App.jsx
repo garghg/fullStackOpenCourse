@@ -15,7 +15,7 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
-  }, [])
+  }, [user])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -30,6 +30,7 @@ const App = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
   }
+
 
   return (
     <div>
