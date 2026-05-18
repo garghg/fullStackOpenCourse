@@ -37,9 +37,7 @@ const App = () => {
   }
 
   const match = useMatch('/blogs/:id')
-  const blog = match
-    ? blogs.find((blog) => blog.id === match.params.id)
-    : null
+  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   return (
     <div>
@@ -53,6 +51,9 @@ const App = () => {
             Login
           </Link>
         )}
+        {user && <Link style={padding} to={'/create'}>
+          Create Blog
+        </Link>}
         {user && (
           <button style={padding} onClick={logout}>
             Logout
@@ -61,6 +62,12 @@ const App = () => {
       </div>
 
       <Routes>
+        <Route
+          path="/create"
+          element={
+            <BlogForm setAlert={setAlert} setBlogs={setBlogs} blogs={blogs} />
+          }
+        />
         <Route
           path="/blogs/:id"
           element={
@@ -73,8 +80,6 @@ const App = () => {
             <BlogList
               blogs={blogs}
               user={user}
-              setBlogs={setBlogs}
-              setAlert={setAlert}
             />
           }
         />

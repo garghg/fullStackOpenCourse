@@ -2,7 +2,7 @@ import Blog from './Blog'
 import BlogForm from './BlogForm'
 import { Link } from 'react-router-dom'
 
-const BlogList = ({ user, setAlert, blogs, setBlogs }) => {
+const BlogList = ({ user, blogs }) => {
   return (
     <div>
       <h2>Blogs</h2>
@@ -13,9 +13,6 @@ const BlogList = ({ user, setAlert, blogs, setBlogs }) => {
           </li>
         ))}
       </ul>
-
-      <h2>Add New Blog</h2>
-      {<BlogForm setAlert={setAlert} setBlogs={setBlogs} blogs={blogs} />}
       {(user && user.name) && (
         <div>
           <h3>Current User</h3>

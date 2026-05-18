@@ -1,5 +1,6 @@
 import Togglable from './Togglable'
 import blogService from '../services/blogs'
+import { useNavigate } from 'react-router-dom'
 
 const Blog = ({ user, blog, blogs, setBlogs, testLike }) => {
 
@@ -7,6 +8,7 @@ const Blog = ({ user, blog, blogs, setBlogs, testLike }) => {
     return null
   }
 
+  const navigate = useNavigate()
   const blogStyle = {
     paddingTop: 20,
     paddingLeft: 10,
@@ -27,6 +29,7 @@ const Blog = ({ user, blog, blogs, setBlogs, testLike }) => {
     }
     await blogService.del(blog.id)
     setBlogs(blogs.filter(b => b.id !== blog.id))
+    navigate('/')
   }
 
   return (
