@@ -51,9 +51,11 @@ const App = () => {
             Login
           </Link>
         )}
-        {user && <Link style={padding} to={'/create'}>
-          Create Blog
-        </Link>}
+        {user && (
+          <Link style={padding} to={'/create'}>
+            Create Blog
+          </Link>
+        )}
         {user && (
           <button style={padding} onClick={logout}>
             Logout
@@ -74,15 +76,7 @@ const App = () => {
             <Blog user={user} blog={blog} blogs={blogs} setBlogs={setBlogs} />
           }
         />
-        <Route
-          path="/"
-          element={
-            <BlogList
-              blogs={blogs}
-              user={user}
-            />
-          }
-        />
+        <Route path="/" element={<BlogList blogs={blogs} user={user} />} />
         <Route
           path="/login"
           element={<LoginForm setUser={setUser} setAlert={setAlert} />}

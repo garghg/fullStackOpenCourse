@@ -13,9 +13,7 @@ const LoginForm = ({ setUser, setAlert }) => {
 
     try {
       const user = await loginService.login({ username, password })
-      window.localStorage.setItem(
-        'loggedUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -24,7 +22,7 @@ const LoginForm = ({ setUser, setAlert }) => {
     } catch {
       setAlert({
         message: 'Invalid username or password',
-        type: 'error'
+        type: 'error',
       })
       setTimeout(() => {
         setAlert(null)
