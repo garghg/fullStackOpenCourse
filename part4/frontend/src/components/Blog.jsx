@@ -48,9 +48,8 @@ const Blog = ({ user, blog, blogs, setBlogs, testLike }) => {
         </div>
         <button onClick={testLike || addLike}>Like</button>
         <br />
-        {console.log(blog.user)}
         {
-          blog.user.id === user.id &&
+          (user && blog.user.id === user.id) &&
           <button onClick={deleteBlog}>Delete</button>
         }
       </Togglable>

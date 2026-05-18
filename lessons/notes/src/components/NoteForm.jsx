@@ -1,15 +1,20 @@
 import { useState } from 'react'
 
+import { useNavigate } from 'react-router-dom'
+
 const NoteForm = ({ createNote }) => {
   const [newNote, setNewNote] = useState('')
 
-  const addNote = event => {
+  const navigate = useNavigate()
+
+  const addNote = (event) => {
     event.preventDefault()
     createNote({
       content: newNote,
-      important: true
+      important: true,
     })
 
+    navigate('/notes')
     setNewNote('')
   }
 
@@ -20,13 +25,11 @@ const NoteForm = ({ createNote }) => {
       <form onSubmit={addNote}>
         <input
           value={newNote}
-          onChange={event => setNewNote(event.target.value)}
-          placeholder='write note content here'
+          onChange={(event) => setNewNote(event.target.value)}
+          placeholder="write note content here"
         />
         <button type="submit">save</button>
       </form>
     </div>
   )
 }
-
-export default NoteForm
