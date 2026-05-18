@@ -3,14 +3,14 @@ import blogService from '../services/blogs'
 
 const Blog = ({ user, blog, blogs, setBlogs, testLike }) => {
 
+  if (!blog) {
+    return null
+  }
+
   const blogStyle = {
-    paddingTop: 10,
+    paddingTop: 20,
     paddingLeft: 10,
     paddingBottom: 10,
-    border: 'solid',
-    borderWidth: 2,
-    marginBottom: 5
-
   }
 
   const addLike = async () => {
@@ -38,7 +38,7 @@ const Blog = ({ user, blog, blogs, setBlogs, testLike }) => {
       <div>
         {blog.author}
       </div>
-      <Togglable showLabel="Show Details" hideLabel="Hide">
+      <div>
         <div>
           {blog.url}
         </div>
@@ -46,13 +46,13 @@ const Blog = ({ user, blog, blogs, setBlogs, testLike }) => {
         <div id='likes'>
           {blog.likes}
         </div>
-        <button onClick={testLike || addLike}>Like</button>
+        {user && <button onClick={testLike || addLike}>Like</button>}
         <br />
         {
           (user && blog.user.id === user.id) &&
           <button onClick={deleteBlog}>Delete</button>
         }
-      </Togglable>
+      </div>
     </div>
   )
 }

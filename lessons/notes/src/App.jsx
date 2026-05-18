@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import noteService from './services/notes'
 
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Link,
