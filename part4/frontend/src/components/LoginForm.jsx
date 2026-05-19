@@ -2,6 +2,7 @@ import { useState } from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 import { useNavigate } from 'react-router-dom'
+import { Button, TextField } from '@mui/material'
 
 const LoginForm = ({ setUser, setAlert }) => {
   const [username, setUsername] = useState('')
@@ -31,31 +32,34 @@ const LoginForm = ({ setUser, setAlert }) => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <div>
-        <label>
-          username
-          <input
-            type="text"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          password
-          <input
-            type="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <button type="submit">Login</button>
-      </div>
-    </form>
+    <div>
+      <h2>Log in to Blogs</h2>
+      <form onSubmit={handleLogin}>
+        <TextField
+          label="username"
+          value={username}
+          onChange={({ target }) => setUsername(target.value)}
+          sx={{ marginBottom: 1 }}
+          variant="standard"
+          size="small"
+        />
+        <br />
+        <TextField
+          type="password"
+          label="password"
+          value={password}
+          onChange={({ target }) => setPassword(target.value)}
+          sx={{ marginBottom: 2 }}
+          variant="standard"
+          size="small"
+        />
+        <div>
+          <Button type="submit" variant="contained">
+            Login
+          </Button>
+        </div>
+      </form>
+    </div>
   )
 }
 

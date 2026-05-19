@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import blogService from '../services/blogs'
 import Togglable from './Togglable'
 import { useNavigate } from 'react-router-dom'
+import { TextField, Button } from '@mui/material'
 
 const BlogForm = ({ setAlert, setBlogs, blogs, testAdd }) => {
   const [title, setTitle] = useState('')
@@ -51,47 +52,39 @@ const BlogForm = ({ setAlert, setBlogs, blogs, testAdd }) => {
   return (
     <div>
       <h2>Add New Blog</h2>
-      <Togglable showLabel={'Create new blog'} ref={blogFormRef}>
-        <form onSubmit={submitHandle}>
-          <div>
-            <label>
-              title
-              <input
-                type="text"
-                value={title}
-                onChange={({ target }) => setTitle(target.value)}
-                placeholder="Enter Blog Title"
-              />
-            </label>
-          </div>
-
-          <div>
-            <label>
-              url
-              <input
-                type="text"
-                value={url}
-                onChange={({ target }) => setUrl(target.value)}
-                placeholder="Enter Blog URL"
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              author
-              <input
-                type="text"
-                value={author}
-                onChange={({ target }) => setAuthor(target.value)}
-                placeholder="Enter Blog Author"
-              />
-            </label>
-          </div>
-          <div>
-            <button type="submit">Add Blog</button>
-          </div>
-        </form>
-      </Togglable>
+      <form onSubmit={submitHandle}>
+        <TextField
+          label="title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          placeholder="Enter Blog Title"
+          size="small"
+          sx={{ width: '25%' }}
+        />
+        <br />
+        <TextField
+          label="url"
+          value={url}
+          onChange={(event) => setUrl(event.target.value)}
+          placeholder="Enter Blog URL"
+          size="small"
+          sx={{ marginTop: 1, width: '25%' }}
+        />
+        <br />
+        <TextField
+          label="author"
+          value={author}
+          onChange={(event) => setAuthor(event.target.value)}
+          placeholder="Enter Blog Author"
+          size="small"
+          sx={{ marginTop: 1, width: '25%' }}
+        />
+        <div>
+          <Button type="submit" variant="contained" sx={{ marginTop: 10 }}>
+            Add Blog
+          </Button>
+        </div>
+      </form>
     </div>
   )
 }

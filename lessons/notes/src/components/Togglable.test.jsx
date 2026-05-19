@@ -7,7 +7,7 @@ describe('<Togglable />', () => {
     render(
       <Togglable buttonLabel="show...">
         <div>togglable content</div>
-      </Togglable>
+      </Togglable>,
     )
   })
 
@@ -31,6 +31,7 @@ describe('<Togglable />', () => {
 
   test('toggled content can be closed', async () => {
     const user = userEvent.setup()
+
     const button = screen.getByText('show...')
     await user.click(button)
 
@@ -40,5 +41,4 @@ describe('<Togglable />', () => {
     const element = screen.getByText('togglable content')
     expect(element).not.toBeVisible()
   })
-
 })

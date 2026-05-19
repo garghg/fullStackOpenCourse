@@ -6,6 +6,7 @@ import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Blog from './components/Blog'
+import { Container } from '@mui/material'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -40,49 +41,51 @@ const App = () => {
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   return (
-    <div>
-      {alert && <div className={alert.type}>{alert.message}</div>}
+    <Container>
       <div>
-        <Link style={padding} to={'/'}>
-          Blogs
-        </Link>
-        {!user && (
-          <Link style={padding} to={'/login'}>
-            Login
+        {alert && <div className={alert.type}>{alert.message}</div>}
+        <div>
+          <Link style={padding} to={'/'}>
+            Blogs
           </Link>
-        )}
-        {user && (
-          <Link style={padding} to={'/create'}>
-            Create Blog
-          </Link>
-        )}
-        {user && (
-          <button style={padding} onClick={logout}>
-            Logout
-          </button>
-        )}
-      </div>
+          {!user && (
+            <Link style={padding} to={'/login'}>
+              Login
+            </Link>
+          )}
+          {user && (
+            <Link style={padding} to={'/create'}>
+              Create Blog
+            </Link>
+          )}
+          {user && (
+            <button style={padding} onClick={logout}>
+              Logout
+            </button>
+          )}
+        </div>
 
-      <Routes>
-        <Route
-          path="/create"
-          element={
-            <BlogForm setAlert={setAlert} setBlogs={setBlogs} blogs={blogs} />
-          }
-        />
-        <Route
-          path="/blogs/:id"
-          element={
-            <Blog user={user} blog={blog} blogs={blogs} setBlogs={setBlogs} />
-          }
-        />
-        <Route path="/" element={<BlogList blogs={blogs} user={user} />} />
-        <Route
-          path="/login"
-          element={<LoginForm setUser={setUser} setAlert={setAlert} />}
-        />
-      </Routes>
-    </div>
+        <Routes>
+          <Route
+            path="/create"
+            element={
+              <BlogForm setAlert={setAlert} setBlogs={setBlogs} blogs={blogs} />
+            }
+          />
+          <Route
+            path="/blogs/:id"
+            element={
+              <Blog user={user} blog={blog} blogs={blogs} setBlogs={setBlogs} />
+            }
+          />
+          <Route path="/" element={<BlogList blogs={blogs} user={user} />} />
+          <Route
+            path="/login"
+            element={<LoginForm setUser={setUser} setAlert={setAlert} />}
+          />
+        </Routes>
+      </div>
+    </Container>
   )
 }
 
