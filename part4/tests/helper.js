@@ -5,6 +5,7 @@ const loginHelper = async (page, username, password) => {
 }
 
 const addInitialBlog = async (page, title, url, author) => {
+    await page.getByRole('link', { name: 'Create Blog' }).click()
     await page.getByRole('button', { name: 'Create new blog' }).click()
     await page.getByPlaceholder('Enter Blog Title')
         .fill(title)
@@ -13,7 +14,7 @@ const addInitialBlog = async (page, title, url, author) => {
     await page.getByPlaceholder('Enter Blog Author')
         .fill(author)
     await page.getByRole('button', { name: 'Add Blog' }).click()
-    await page.getByText(title, { exact: true }).waitFor()
+    await page.getByRole('link', { name: title }).waitFor()
 }
 
 export { loginHelper, addInitialBlog }
