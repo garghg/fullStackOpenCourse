@@ -1,6 +1,7 @@
 import Togglable from './Togglable'
 import blogService from '../services/blogs'
 import { useNavigate } from 'react-router-dom'
+import { Paper, Typography, Button } from '@mui/material'
 
 const Blog = ({ user, blog, setBlogs, blogs, testLike }) => {
   const navigate = useNavigate()
@@ -18,7 +19,9 @@ const Blog = ({ user, blog, setBlogs, blogs, testLike }) => {
   const addLike = async () => {
     const updatedBlog = { ...blog, likes: blog.likes + 1 }
     const returnedBlog = await blogService.update(blog.id, updatedBlog)
-    const updatedBlogs = blogs.map((b) => (b.id === blog.id ? returnedBlog : b))
+    const updatedBlogs = blogs.map((b) =>
+      b.id === blog.id ? { ...returnedBlog, user: blog.user } : b,
+    )
     setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
   }
 
@@ -32,22 +35,43 @@ const Blog = ({ user, blog, setBlogs, blogs, testLike }) => {
     navigate('/')
   }
 
+  const fontColor = 'rgb(138, 131, 129)'
+
   return (
-    <div style={blogStyle}>
-      <div>{blog.title}</div>
-      <br />
-      <div>{blog.author}</div>
-      <div>
-        <div>{blog.url}</div>
+    <Paper sx={{ padding: 2, marginTop: 3 }} elevation={3}>
+      <div style={blogStyle}>
+        <Typography variant="h6">{blog.title}</Typography>
         <br />
-        <div id="likes">{blog.likes}</div>
-        {user && <button onClick={testLike || addLike}>Like</button>}
-        <br />
+        <Typography sx={{ color: fontColor }}>{blog.author}</Typography>
+        <Typography component="a" href={blog.url} variant="body">
+          {blog.url}
+        </Typography>
+        <Typography sx={{ marginTop: 1 }}>{blog.likes} Likes</Typography>
+        {user && (
+          <Button
+            onClick={testLike || addLike}
+            variant="outlined"
+            sx={{
+              marginRight: 1,
+              marginTop: 1,
+              borderColor: 'rgb(0, 255, 0)',
+              borderWidth: 2,
+            }}
+          >
+            Like
+          </Button>
+        )}
         {user && blog.user.id === user.id && (
-          <button onClick={deleteBlog}>Delete</button>
+          <Button
+            onClick={deleteBlog}
+            variant="outlined"
+            sx={{ marginTop: 1, borderColor: 'rgb(255, 0, 0)', borderWidth: 2 }}
+          >
+            Delete
+          </Button>
         )}
       </div>
-    </div>
+    </Paper>
   )
 }
 
