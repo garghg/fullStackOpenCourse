@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import blogService from '../services/blogs'
 import Togglable from './Togglable'
 import { useNavigate } from 'react-router-dom'
@@ -8,7 +8,6 @@ const BlogForm = ({ setAlert, setBlogs, blogs, testAdd }) => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
-  const blogFormRef = useRef()
   const navigate = useNavigate()
 
   const submitHandle = async (event) => {
@@ -29,7 +28,6 @@ const BlogForm = ({ setAlert, setBlogs, blogs, testAdd }) => {
   const addBlog = async (newBlog) => {
     const response = await blogService.create(newBlog)
     if (response) {
-      blogFormRef.current.toggleVisibility()
       setAlert({
         message: `Added ${title}`,
         type: 'success',

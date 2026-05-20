@@ -6,7 +6,8 @@ import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Blog from './components/Blog'
-import { Container } from '@mui/material'
+import { Container, AppBar, Button, Toolbar, Typography } from '@mui/material'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -33,8 +34,10 @@ const App = () => {
     setUser(null)
   }
 
-  const padding = {
-    padding: 5,
+  const buttonStyle = {
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    },
   }
 
   const match = useMatch('/blogs/:id')
@@ -43,27 +46,35 @@ const App = () => {
   return (
     <Container>
       <div>
-        {alert && <div className={alert.type}>{alert.message}</div>}
         <div>
-          <Link style={padding} to={'/'}>
-            Blogs
-          </Link>
-          {!user && (
-            <Link style={padding} to={'/login'}>
-              Login
-            </Link>
-          )}
-          {user && (
-            <Link style={padding} to={'/create'}>
-              Create Blog
-            </Link>
-          )}
-          {user && (
-            <button style={padding} onClick={logout}>
-              Logout
-            </button>
-          )}
+          <AppBar position="static">
+            <Toolbar>
+              <Typography variant="h5" sx={{ flexGrow: 1 }}>
+                Blogs
+              </Typography>
+              <Button sx={buttonStyle} color="inherit" component={Link} to="/">
+                BLogs
+              </Button>
+              {user && (
+                <Button sx={buttonStyle} color="inherit" component={Link} to="/create">
+                  Create Blog
+                </Button>
+              )}
+              {!user && (
+                <Button sx={buttonStyle} color="inherit" component={Link} to="/login">
+                  Login
+                </Button>
+              )}
+              {user && (
+                <Button sx={buttonStyle} color="inherit" onClick={logout}>
+                  Logout
+                </Button>
+              )}
+            </Toolbar>
+          </AppBar>
         </div>
+
+        <Notification alert={alert} />
 
         <Routes>
           <Route
