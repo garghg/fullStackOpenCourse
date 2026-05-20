@@ -1,15 +1,21 @@
-
 import { useAnecdoteActions, useAnecdotes } from './store'
 
 const App = () => {
   const anecdotes = useAnecdotes()
 
-  const { vote } = useAnecdoteActions()
+  const { vote, add } = useAnecdoteActions()
+
+  const addHandler = event => {
+    event.preventDefault()
+    const content = event.target.anecdote.value
+    add(content)
+    event.target.reset()
+  }
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote => (
+      {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>
@@ -19,11 +25,11 @@ const App = () => {
         </div>
       ))}
       <h2>create new</h2>
-      <form>
+      <form onSubmit={addHandler}>
         <div>
-          <input />
+          <input name="anecdote" />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
       </form>
     </div>
   )
