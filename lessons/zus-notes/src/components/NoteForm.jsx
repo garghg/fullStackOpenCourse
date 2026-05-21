@@ -1,13 +1,11 @@
-import { useNoteActions } from './store'
+import { useNoteActions } from '../store'
 
 const NoteForm = () => {
-
   const { add } = useNoteActions()
 
   const addNote = async (e) => {
     e.preventDefault()
     const content = e.target.note.value
-
     await add(content)
     e.target.reset()
   }

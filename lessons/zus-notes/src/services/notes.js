@@ -7,18 +7,15 @@ const getAll = async () => {
     throw new Error('Failed to fetch notes')
   }
 
-  return await response.json()
+  return await response.json() 
 }
 
-
 const createNew = async (content) => {
-  const options = {
+  const response = await fetch(baseUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ content, important: false }),
-  }
-  
-  const response = await fetch(baseUrl, options)
+  })
   
   if (!response.ok) {
     throw new Error('Failed to create note')
@@ -26,7 +23,6 @@ const createNew = async (content) => {
   
   return await response.json()
 }
-
 
 const update = async (id, note) => {
   const response = await fetch(`${baseUrl}/${id}`, {
@@ -42,4 +38,4 @@ const update = async (id, note) => {
   return await response.json()
 }
 
-export default { getAll, createNew, update } 
+export default { getAll, createNew, update }
