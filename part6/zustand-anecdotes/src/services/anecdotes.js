@@ -17,7 +17,7 @@ const createNew = async (content) => {
 
   const response = await fetch(baseUrl, options)
   if (!response.ok) {
-    throw new Error('Could not get notes from server')
+    throw new Error('Could not create new note')
   }
   return await response.json()
 }
@@ -31,9 +31,19 @@ const update = async (id, anecdote) => {
 
   const response = await fetch(`${baseUrl}/${id}`, options)
   if (!response.ok) {
-    throw new Error('Could not get notes from server')
+    throw new Error('Could not update votes')
   }
   return await response.json()
 }
 
-export default { getAll, createNew, update }
+const del = async (id) => {
+  const response = await fetch(`${baseUrl}/${id}`, {
+    method: 'DELETE',
+  })
+  if (!response.ok) {
+    throw new Error('Could not delete note from server')
+  }
+  return await response.json()
+}
+
+export default { getAll, createNew, update, del }
