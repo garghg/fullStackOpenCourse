@@ -1,14 +1,10 @@
-import { useAnecdoteActions, useAnecdotes, useFilter } from '../anecdoteStore'
+import { useAnecdoteActions, useFilteredAnecdotes } from '../anecdoteStore'
 import { useNotificationActions } from '../notificationStore'
 
 const AnecdoteList = () => {
-  const anecdotes = useAnecdotes()
-  const filter = useFilter()
   const { vote, delAnecdote } = useAnecdoteActions()
   const { setMessage } = useNotificationActions()
-  const filtered = anecdotes.filter((a) =>
-    a.content.toLowerCase().includes(filter.toLowerCase()),
-  )
+  const filtered = useFilteredAnecdotes()
 
   const handleVote = (anecdote) => {
     setMessage(`Voted: ${anecdote.content}`)
