@@ -1,3 +1,5 @@
+import { useMessage } from "../notificationStore"
+
 const Notification = () => {
   const style = {
     border: 'solid',
@@ -6,7 +8,13 @@ const Notification = () => {
     marginBottom: 10
   }
 
-  return <div style={style}>render here notification...</div>
+  const message = useMessage()
+
+  if (message == '') {
+    return null
+  }
+
+  return <div style={style}>{message}</div>
 }
 
 export default Notification

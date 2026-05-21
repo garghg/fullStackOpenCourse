@@ -1,12 +1,14 @@
-import { useAnecdoteActions } from "../store"
+import { useAnecdoteActions } from '../anecdoteStore'
+import { useNotificationActions } from '../notificationStore'
 
 const AnecdoteForm = () => {
-  
-    const { add } = useAnecdoteActions()
+  const { add } = useAnecdoteActions()
+  const { setMessage } = useNotificationActions()
 
   const addHandler = async (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
+    setMessage(`Anecdote Added: ${content}`)
     await add(content)
     event.target.reset()
   }
@@ -23,6 +25,5 @@ const AnecdoteForm = () => {
     </div>
   )
 }
-
 
 export default AnecdoteForm
