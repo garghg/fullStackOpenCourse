@@ -35,7 +35,10 @@ const useAnecdoteStore = create((set, get) => ({
   },
 }))
 
-export const useAnecdotes = () => useAnecdoteStore((state) => state.anecdotes)
+export const useAnecdotes = () =>
+  useAnecdoteStore((state) => state.anecdotes).toSorted(
+    (a, b) => b.votes - a.votes,
+  )
 export const useFilter = () => useAnecdoteStore((state) => state.filter)
 export const useAnecdoteActions = () =>
   useAnecdoteStore((state) => state.actions)

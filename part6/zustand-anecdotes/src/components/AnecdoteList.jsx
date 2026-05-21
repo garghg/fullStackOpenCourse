@@ -2,7 +2,7 @@ import { useAnecdoteActions, useAnecdotes, useFilter } from '../anecdoteStore'
 import { useNotificationActions } from '../notificationStore'
 
 const AnecdoteList = () => {
-  const anecdotes = useAnecdotes().toSorted((a, b) => b.votes - a.votes)
+  const anecdotes = useAnecdotes()
   const filter = useFilter()
   const { vote, delAnecdote } = useAnecdoteActions()
   const { setMessage } = useNotificationActions()
