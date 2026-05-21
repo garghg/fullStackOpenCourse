@@ -8,4 +8,32 @@ const getAll = async () => {
   return await response.json()
 }
 
-export default { getAll }
+const createNew = async (content) => {
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content, votes: 0 }),
+  }
+
+  const response = await fetch(baseUrl, options)
+  if (!response.ok) {
+    throw new Error('Could not get notes from server')
+  }
+  return await response.json()
+}
+
+const update = async (id, anecdote) => {
+  const options = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(anecdote),
+  }
+
+  const response = await fetch(`${baseUrl}/${id}`, options)
+  if (!response.ok) {
+    throw new Error('Could not get notes from server')
+  }
+  return await response.json()
+}
+
+export default { getAll, createNew, update }
