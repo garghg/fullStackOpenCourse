@@ -7,3 +7,18 @@ export const getAll = async () => {
   }
   return await response.json()
 }
+
+export const create = async (newAnecdote) => {
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newAnecdote)
+    }
+
+    const response = await fetch(baseURL, options)
+    if (!response.ok) {
+        throw new Error('Could not add new anecdote')
+    }
+
+    return await response.json()
+}

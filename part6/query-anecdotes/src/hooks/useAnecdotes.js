@@ -1,7 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
-import { getAll } from '../requests'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import { getAll, create } from '../requests'
 
 export const useAnecdotes = () => {
+
+    const queryClient = useQueryClient()
 
     const result = useQuery({
         queryKey: ['anecdotes'],
@@ -10,11 +12,18 @@ export const useAnecdotes = () => {
         retry: 1
     })
 
-    console.log(result.data)
+    const useAnecMutation = useMutation({
+        mutationFn: create,
+        onSuccess: (newAnecdote) => {
+            const anecdotes = queryClient.getQueryData(['anecdotes'])
+            queryClient.setQueriesData(['anecdotes'], anecdotes.concat(newAnecdote))
+        }
+    })
 
     return ({
         anecdotes: result.data,
         isPending: result.isPending,
-        isError: result.isError
+        isError: result.isError,
+        addAnecdote: (content) => useAnecMutation.mutate({ content, votes: 0 })
     })
 }
