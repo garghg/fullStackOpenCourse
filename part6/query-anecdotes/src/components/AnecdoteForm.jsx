@@ -1,8 +1,8 @@
 import { useAnecdotes } from "../hooks/useAnecdotes"
-import useNotification from '../hooks/useNotification'
+import useNotify from '../hooks/useNotify'
 
 const AnecdoteForm = () => {
-  const { setAlert } = useNotification()
+  const { setAlert } = useNotify()
   const { addAnecdote } = useAnecdotes() 
 
   const onCreate = (event) => {

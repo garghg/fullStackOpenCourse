@@ -17,7 +17,8 @@ export const create = async (newAnecdote) => {
 
     const response = await fetch(baseURL, options)
     if (!response.ok) {
-        throw new Error('Could not add new anecdote')
+        const errorData = await response.json()
+        throw new Error(errorData.error)
     }
 
     return await response.json()

@@ -1,8 +1,8 @@
-import useNotification from '../hooks/useNotification'
+import useNotify from '../hooks/useNotify'
 import { useEffect } from 'react'
 
 const Notification = () => {
-  const { alert, setAlert } = useNotification()
+  const { alert, setAlert } = useNotify()
 
   const style = {
     border: 'solid',
