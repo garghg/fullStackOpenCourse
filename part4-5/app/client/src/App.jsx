@@ -8,6 +8,7 @@ import LoginForm from './components/LoginForm'
 import Blog from './components/Blog'
 import { Container, AppBar, Button, Toolbar, Typography } from '@mui/material'
 import Notification from './components/Notification'
+import ErrorBoundary from './ErrorBoundary'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -56,12 +57,22 @@ const App = () => {
                 BLogs
               </Button>
               {user && (
-                <Button sx={buttonStyle} color="inherit" component={Link} to="/create">
+                <Button
+                  sx={buttonStyle}
+                  color="inherit"
+                  component={Link}
+                  to="/create"
+                >
                   Create Blog
                 </Button>
               )}
               {!user && (
-                <Button sx={buttonStyle} color="inherit" component={Link} to="/login">
+                <Button
+                  sx={buttonStyle}
+                  color="inherit"
+                  component={Link}
+                  to="/login"
+                >
                   Login
                 </Button>
               )}
@@ -80,19 +91,39 @@ const App = () => {
           <Route
             path="/create"
             element={
-              <BlogForm setAlert={setAlert} setBlogs={setBlogs} blogs={blogs} />
+              <ErrorBoundary>
+                <BlogForm setAlert={setAlert} setBlogs={setBlogs} blogs={blogs} />
+              </ErrorBoundary>
             }
           />
           <Route
             path="/blogs/:id"
             element={
-              <Blog user={user} blog={blog} blogs={blogs} setBlogs={setBlogs} />
+              <ErrorBoundary>
+                <Blog
+                  user={user}
+                  blog={blog}
+                  blogs={blogs}
+                  setBlogs={setBlogs}
+                />
+              </ErrorBoundary>
             }
           />
-          <Route path="/" element={<BlogList blogs={blogs} user={user} />} />
+          <Route
+            path="/"
+            element={
+              <ErrorBoundary>
+                <BlogList blogs={blogs} user={user} />
+              </ErrorBoundary>
+            }
+          />
           <Route
             path="/login"
-            element={<LoginForm setUser={setUser} setAlert={setAlert} />}
+            element={
+              <ErrorBoundary>
+                <LoginForm setUser={setUser} setAlert={setAlert} />
+              </ErrorBoundary>
+            }
           />
         </Routes>
       </div>
