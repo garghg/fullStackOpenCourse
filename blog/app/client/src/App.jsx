@@ -92,7 +92,11 @@ const App = () => {
             path="/create"
             element={
               <ErrorBoundary>
-                <BlogForm setAlert={setAlert} setBlogs={setBlogs} blogs={blogs} />
+                <BlogForm
+                  setAlert={setAlert}
+                  setBlogs={setBlogs}
+                  blogs={blogs}
+                />
               </ErrorBoundary>
             }
           />
@@ -125,6 +129,7 @@ const App = () => {
               </ErrorBoundary>
             }
           />
+          <Route path="*" element={<h2>404 - Page not found</h2>} />
         </Routes>
       </div>
     </Container>
