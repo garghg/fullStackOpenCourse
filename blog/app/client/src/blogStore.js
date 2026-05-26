@@ -3,8 +3,10 @@ import blogService from './services/blogs'
 
 const useBlogStore = create((set) => ({
   blogs: [],
+  user: null,
   actions: {
     initialize: (blogs) => set(() => ({ blogs })),
+    setUser: (user) => set(() => ({ user })),
     create: async (blog) => {
       const updated = await blogService.create(blog)
       set((state) => ({ blogs: [...state.blogs, updated] }))
@@ -22,7 +24,7 @@ const useBlogStore = create((set) => ({
     delBlog: async (id) => {
       await blogService.del(id)
       set((state) => ({
-        blogs: state.blogs.filter((b) => b.id !== id)
+        blogs: state.blogs.filter((b) => b.id !== id),
       }))
     },
   },
@@ -30,4 +32,5 @@ const useBlogStore = create((set) => ({
 
 export const useBlogArray = () =>
   useBlogStore((state) => state.blogs).sort((a, b) => b.likes - a.likes)
+export const useBlogUser = () => useBlogStore((state) => state.user)
 export const useBlogActions = () => useBlogStore((state) => state.actions)

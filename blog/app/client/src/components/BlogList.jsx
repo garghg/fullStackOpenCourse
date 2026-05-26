@@ -1,8 +1,12 @@
 import Blog from './Blog'
 import BlogForm from './BlogForm'
 import { Link } from 'react-router-dom'
+import { useBlogUser, useBlogArray } from '../blogStore'
 
-const BlogList = ({ user, blogs }) => {
+
+const BlogList = () => {
+  const user = useBlogUser()
+  const blogs = useBlogArray()
   return (
     <div>
       <h2>Blogs</h2>

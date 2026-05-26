@@ -4,12 +4,15 @@ import blogService from '../services/blogs'
 import { useNavigate } from 'react-router-dom'
 import { Button, TextField } from '@mui/material'
 import { useNotifActions } from '../notificationStore'
+import { useBlogActions } from '../blogStore'
 
-const LoginForm = ({ setUser }) => {
+
+const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
   const { setAlert } = useNotifActions()
+  const { setUser } = useBlogActions()
 
   const handleLogin = async (event) => {
     event.preventDefault()

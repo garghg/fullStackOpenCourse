@@ -1,5 +1,5 @@
 import './index.css'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import blogService from './services/blogs'
 import { Routes, Route, Link, useMatch } from 'react-router-dom'
 import BlogList from './components/BlogList'
@@ -10,12 +10,13 @@ import { Container, AppBar, Button, Toolbar, Typography } from '@mui/material'
 import Notification from './components/Notification'
 import ErrorBoundary from './ErrorBoundary'
 import { useNavigate } from 'react-router-dom'
-import { useBlogArray, useBlogActions } from './blogStore'
+import { useBlogArray, useBlogUser, useBlogActions } from './blogStore'
 
 const App = () => {
   const blogs = useBlogArray()
   const { initialize } = useBlogActions()
-  const [user, setUser] = useState(null)
+  const user = useBlogUser()
+  const { setUser } = useBlogActions()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -105,7 +106,6 @@ const App = () => {
             element={
               <ErrorBoundary>
                 <Blog
-                  user={user}
                   blog={blog}
                 />
               </ErrorBoundary>
@@ -115,7 +115,7 @@ const App = () => {
             path="/"
             element={
               <ErrorBoundary>
-                <BlogList blogs={blogs} user={user} />
+                <BlogList />
               </ErrorBoundary>
             }
           />
@@ -123,7 +123,7 @@ const App = () => {
             path="/login"
             element={
               <ErrorBoundary>
-                <LoginForm setUser={setUser} />
+                <LoginForm />
               </ErrorBoundary>
             }
           />
