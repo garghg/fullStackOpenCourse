@@ -9,11 +9,12 @@ import Blog from './components/Blog'
 import { Container, AppBar, Button, Toolbar, Typography } from '@mui/material'
 import Notification from './components/Notification'
 import ErrorBoundary from './ErrorBoundary'
+import { useNavigate } from 'react-router-dom'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [alert, setAlert] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     blogService
@@ -33,6 +34,7 @@ const App = () => {
   const logout = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
+    navigate('/')
   }
 
   const buttonStyle = {
@@ -85,7 +87,7 @@ const App = () => {
           </AppBar>
         </div>
 
-        <Notification alert={alert} />
+        <Notification />
 
         <Routes>
           <Route
@@ -93,7 +95,6 @@ const App = () => {
             element={
               <ErrorBoundary>
                 <BlogForm
-                  setAlert={setAlert}
                   setBlogs={setBlogs}
                   blogs={blogs}
                 />
@@ -125,7 +126,7 @@ const App = () => {
             path="/login"
             element={
               <ErrorBoundary>
-                <LoginForm setUser={setUser} setAlert={setAlert} />
+                <LoginForm setUser={setUser} />
               </ErrorBoundary>
             }
           />

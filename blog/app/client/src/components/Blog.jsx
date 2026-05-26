@@ -2,9 +2,11 @@ import Togglable from './Togglable'
 import blogService from '../services/blogs'
 import { useNavigate } from 'react-router-dom'
 import { Paper, Typography, Button } from '@mui/material'
+import { useNotifActions } from '../notificationStore'
 
 const Blog = ({ user, blog, setBlogs, blogs, testLike }) => {
   const navigate = useNavigate()
+  const { setAlert } = useNotifActions()
 
   if (!blog) {
     return null
@@ -32,6 +34,8 @@ const Blog = ({ user, blog, setBlogs, blogs, testLike }) => {
     }
     await blogService.del(blog.id)
     setBlogs(blogs.filter((b) => b.id !== blog.id))
+    setAlert(`Deleted ${blog.title}`, 'success')
+    setTimeout(() => setAlert(null), 5000)
     navigate('/')
   }
 

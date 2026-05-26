@@ -3,12 +3,14 @@ import blogService from '../services/blogs'
 import Togglable from './Togglable'
 import { useNavigate } from 'react-router-dom'
 import { TextField, Button } from '@mui/material'
+import { useNotifActions } from '../notificationStore'
 
-const BlogForm = ({ setAlert, setBlogs, blogs, testAdd }) => {
+const BlogForm = ({ setBlogs, blogs, testAdd }) => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
   const navigate = useNavigate()
+  const { setAlert } = useNotifActions()
 
   const submitHandle = async (event) => {
     const newBlog = {
@@ -22,21 +24,14 @@ const BlogForm = ({ setAlert, setBlogs, blogs, testAdd }) => {
     } else {
       await addBlog(newBlog)
     }
-    navigate('/')
   }
 
   const addBlog = async (newBlog) => {
     const response = await blogService.create(newBlog)
     if (response) {
-      setAlert({
-        message: `Added ${title}`,
-        type: 'success',
-      })
+      setAlert(`Added ${title}`, 'success')
     } else {
-      setAlert({
-        message: 'Something went wrong',
-        type: 'error',
-      })
+      setAlert('Something went wrong', 'error')
     }
     setTimeout(() => {
       setAlert(null)
@@ -45,6 +40,7 @@ const BlogForm = ({ setAlert, setBlogs, blogs, testAdd }) => {
     setTitle('')
     setUrl('')
     setAuthor('')
+    navigate('/')
   }
 
   return (
