@@ -3,7 +3,7 @@ import { create } from 'zustand'
 const useNotifStore = create((set) => ({
   alert: null,
   actions: {
-    setAlert: (message, type = 'info') => set({ alert: message ? { message, type } : null })
+    setAlert: (message, type) => set({ alert: message ? { message, type } : null })
   }
 }))
 

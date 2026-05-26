@@ -10,17 +10,19 @@ import { Container, AppBar, Button, Toolbar, Typography } from '@mui/material'
 import Notification from './components/Notification'
 import ErrorBoundary from './ErrorBoundary'
 import { useNavigate } from 'react-router-dom'
+import { useBlogArray, useBlogActions } from './blogStore'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useBlogArray()
+  const { initialize } = useBlogActions()
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
     blogService
       .getAll()
-      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
-  }, [user])
+      .then((blogs) => initialize(blogs))
+  }, [user, initialize])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -94,10 +96,7 @@ const App = () => {
             path="/create"
             element={
               <ErrorBoundary>
-                <BlogForm
-                  setBlogs={setBlogs}
-                  blogs={blogs}
-                />
+                <BlogForm />
               </ErrorBoundary>
             }
           />
@@ -108,8 +107,6 @@ const App = () => {
                 <Blog
                   user={user}
                   blog={blog}
-                  blogs={blogs}
-                  setBlogs={setBlogs}
                 />
               </ErrorBoundary>
             }
