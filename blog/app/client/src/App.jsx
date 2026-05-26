@@ -9,11 +9,11 @@ import Blog from './components/Blog'
 import { Container, AppBar, Button, Toolbar, Typography } from '@mui/material'
 import Notification from './components/Notification'
 import ErrorBoundary from './ErrorBoundary'
+import { NotifContextProvider } from './notifContext'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [alert, setAlert] = useState(null)
 
   useEffect(() => {
     blogService
@@ -45,94 +45,100 @@ const App = () => {
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   return (
-    <Container>
-      <div>
+    <NotifContextProvider>
+      <Container>
         <div>
-          <AppBar position="static">
-            <Toolbar>
-              <Typography variant="h5" sx={{ flexGrow: 1 }}>
-                Blogs
-              </Typography>
-              <Button sx={buttonStyle} color="inherit" component={Link} to="/">
-                BLogs
-              </Button>
-              {user && (
+          <div>
+            <AppBar position="static">
+              <Toolbar>
+                <Typography variant="h5" sx={{ flexGrow: 1 }}>
+                  Blogs
+                </Typography>
                 <Button
                   sx={buttonStyle}
                   color="inherit"
                   component={Link}
-                  to="/create"
+                  to="/"
                 >
-                  Create Blog
+                  BLogs
                 </Button>
-              )}
-              {!user && (
-                <Button
-                  sx={buttonStyle}
-                  color="inherit"
-                  component={Link}
-                  to="/login"
-                >
-                  Login
-                </Button>
-              )}
-              {user && (
-                <Button sx={buttonStyle} color="inherit" onClick={logout}>
-                  Logout
-                </Button>
-              )}
-            </Toolbar>
-          </AppBar>
+                {user && (
+                  <Button
+                    sx={buttonStyle}
+                    color="inherit"
+                    component={Link}
+                    to="/create"
+                  >
+                    Create Blog
+                  </Button>
+                )}
+                {!user && (
+                  <Button
+                    sx={buttonStyle}
+                    color="inherit"
+                    component={Link}
+                    to="/login"
+                  >
+                    Login
+                  </Button>
+                )}
+                {user && (
+                  <Button sx={buttonStyle} color="inherit" onClick={logout}>
+                    Logout
+                  </Button>
+                )}
+              </Toolbar>
+            </AppBar>
+          </div>
+
+          <Notification />
+
+          <Routes>
+            <Route
+              path="/create"
+              element={
+                <ErrorBoundary>
+                  <BlogForm
+                    setBlogs={setBlogs}
+                    blogs={blogs}
+                  />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/blogs/:id"
+              element={
+                <ErrorBoundary>
+                  <Blog
+                    user={user}
+                    blog={blog}
+                    blogs={blogs}
+                    setBlogs={setBlogs}
+                  />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <ErrorBoundary>
+                  <BlogList blogs={blogs} user={user} />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <ErrorBoundary>
+                  <LoginForm setUser={setUser} />
+                </ErrorBoundary>
+              }
+            />
+            <Route path="*" element={<h2>404 - Page not found</h2>} />
+          </Routes>
         </div>
-
-        <Notification alert={alert} />
-
-        <Routes>
-          <Route
-            path="/create"
-            element={
-              <ErrorBoundary>
-                <BlogForm
-                  setAlert={setAlert}
-                  setBlogs={setBlogs}
-                  blogs={blogs}
-                />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/blogs/:id"
-            element={
-              <ErrorBoundary>
-                <Blog
-                  user={user}
-                  blog={blog}
-                  blogs={blogs}
-                  setBlogs={setBlogs}
-                />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <ErrorBoundary>
-                <BlogList blogs={blogs} user={user} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <ErrorBoundary>
-                <LoginForm setUser={setUser} setAlert={setAlert} />
-              </ErrorBoundary>
-            }
-          />
-          <Route path="*" element={<h2>404 - Page not found</h2>} />
-        </Routes>
-      </div>
-    </Container>
+      </Container>
+    </NotifContextProvider>
   )
 }
 

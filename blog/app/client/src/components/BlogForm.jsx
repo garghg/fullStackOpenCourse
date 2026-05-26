@@ -3,12 +3,15 @@ import blogService from '../services/blogs'
 import Togglable from './Togglable'
 import { useNavigate } from 'react-router-dom'
 import { TextField, Button } from '@mui/material'
+import NotifContext from '../notifContext'
+import { useContext } from 'react'
 
-const BlogForm = ({ setAlert, setBlogs, blogs, testAdd }) => {
+const BlogForm = ({ setBlogs, blogs, testAdd }) => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
   const navigate = useNavigate()
+  const { setAlert } = useContext(NotifContext)
 
   const submitHandle = async (event) => {
     const newBlog = {

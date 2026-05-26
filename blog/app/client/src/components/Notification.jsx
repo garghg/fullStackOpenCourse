@@ -1,6 +1,10 @@
 import { Alert } from '@mui/material'
+import NotifContext from '../notifContext'
+import { useContext } from 'react'
 
-const Notification = ({ alert }) => {
+const Notification = () => {
+  const { alert } = useContext(NotifContext)
+
   if (alert === null) {
     return null
   }
