@@ -1,23 +1,17 @@
-import { useState } from 'react'
-import blogService from '../services/blogs'
-import Togglable from './Togglable'
 import { useNavigate } from 'react-router-dom'
 import { TextField, Button } from '@mui/material'
 import NotifContext from '../notifContext'
-import { useContext } from 'react'
+import { useBlogs } from '../hooks/useBlogs'
 
-const BlogForm = ({ setBlogs, blogs, testAdd }) => {
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
-  const [author, setAuthor] = useState('')
+const BlogForm = ({ testAdd }) => {
   const navigate = useNavigate()
-  const { setAlert } = useContext(NotifContext)
+  const { addBlog } = useBlogs()
 
   const submitHandle = async (event) => {
     const newBlog = {
-      title,
-      author,
-      url,
+      title: event.target.title.value,
+      author: event.target.author.value,
+      url: event.target.url.value,
     }
     event.preventDefault()
     if (testAdd) {
@@ -25,29 +19,8 @@ const BlogForm = ({ setBlogs, blogs, testAdd }) => {
     } else {
       await addBlog(newBlog)
     }
+    event.target.reset()
     navigate('/')
-  }
-
-  const addBlog = async (newBlog) => {
-    const response = await blogService.create(newBlog)
-    if (response) {
-      setAlert({
-        message: `Added ${title}`,
-        type: 'success',
-      })
-    } else {
-      setAlert({
-        message: 'Something went wrong',
-        type: 'error',
-      })
-    }
-    setTimeout(() => {
-      setAlert(null)
-    }, 5000)
-    setBlogs(blogs.concat(response))
-    setTitle('')
-    setUrl('')
-    setAuthor('')
   }
 
   return (
@@ -56,8 +29,7 @@ const BlogForm = ({ setBlogs, blogs, testAdd }) => {
       <form onSubmit={submitHandle}>
         <TextField
           label="title"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
+          name="title"
           placeholder="Enter Blog Title"
           size="small"
           sx={{ width: '25%' }}
@@ -65,8 +37,7 @@ const BlogForm = ({ setBlogs, blogs, testAdd }) => {
         <br />
         <TextField
           label="url"
-          value={url}
-          onChange={(event) => setUrl(event.target.value)}
+          name="url"
           placeholder="Enter Blog URL"
           size="small"
           sx={{ marginTop: 1, width: '25%' }}
@@ -74,8 +45,7 @@ const BlogForm = ({ setBlogs, blogs, testAdd }) => {
         <br />
         <TextField
           label="author"
-          value={author}
-          onChange={(event) => setAuthor(event.target.value)}
+          name="author"
           placeholder="Enter Blog Author"
           size="small"
           sx={{ marginTop: 1, width: '25%' }}
