@@ -12,6 +12,7 @@ import ErrorBoundary from './ErrorBoundary'
 import { useNavigate } from 'react-router-dom'
 import { useBlogArray, useBlogUser, useBlogActions } from './blogStore'
 import { getUser, removeUser } from './services/persistentUser'
+import UserList from './components/UserList'
 
 const App = () => {
   const blogs = useBlogArray()
@@ -20,9 +21,7 @@ const App = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    blogService
-      .getAll()
-      .then((blogs) => initialize(blogs))
+    blogService.getAll().then((blogs) => initialize(blogs))
   }, [user, initialize])
 
   useEffect(() => {
@@ -58,6 +57,14 @@ const App = () => {
               </Typography>
               <Button sx={buttonStyle} color="inherit" component={Link} to="/">
                 BLogs
+              </Button>
+              <Button
+                sx={buttonStyle}
+                color="inherit"
+                component={Link}
+                to="/users"
+              >
+                Users
               </Button>
               {user && (
                 <Button
@@ -103,9 +110,7 @@ const App = () => {
             path="/blogs/:id"
             element={
               <ErrorBoundary>
-                <Blog
-                  blog={blog}
-                />
+                <Blog blog={blog} />
               </ErrorBoundary>
             }
           />
@@ -122,6 +127,14 @@ const App = () => {
             element={
               <ErrorBoundary>
                 <LoginForm />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <ErrorBoundary>
+                <UserList />
               </ErrorBoundary>
             }
           />
