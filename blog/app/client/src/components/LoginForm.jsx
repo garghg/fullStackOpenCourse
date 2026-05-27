@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import loginService from '../services/login'
-import blogService from '../services/blogs'
 import { useNavigate } from 'react-router-dom'
 import { Button, TextField } from '@mui/material'
 import { useNotifActions } from '../notificationStore'
 import { useBlogActions } from '../blogStore'
 
+import { saveUser } from '../services/persistentUser'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -19,8 +19,7 @@ const LoginForm = () => {
 
     try {
       const user = await loginService.login({ username, password })
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      blogService.setToken(user.token)
+      saveUser(user)
       setUser(user)
       setUsername('')
       setPassword('')

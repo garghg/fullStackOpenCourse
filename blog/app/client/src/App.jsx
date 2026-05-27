@@ -11,12 +11,12 @@ import Notification from './components/Notification'
 import ErrorBoundary from './ErrorBoundary'
 import { useNavigate } from 'react-router-dom'
 import { useBlogArray, useBlogUser, useBlogActions } from './blogStore'
+import { getUser, removeUser } from './services/persistentUser'
 
 const App = () => {
   const blogs = useBlogArray()
-  const { initialize } = useBlogActions()
+  const { initialize, setUser } = useBlogActions()
   const user = useBlogUser()
-  const { setUser } = useBlogActions()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -26,16 +26,14 @@ const App = () => {
   }, [user, initialize])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+    const savedUser = getUser()
+    if (savedUser) {
+      setUser(savedUser)
     }
-  }, [])
+  }, [setUser])
 
   const logout = () => {
-    window.localStorage.removeItem('loggedUser')
+    removeUser()
     setUser(null)
     navigate('/')
   }
