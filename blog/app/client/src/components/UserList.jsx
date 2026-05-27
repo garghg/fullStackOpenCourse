@@ -7,11 +7,14 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 const UserList = ({ users }) => {
   return (
     <div>
-      <Typography variant='h5' sx={{ marginTop: 2 }}>Users</Typography>
+      <Typography variant="h5" sx={{ marginTop: 2 }}>
+        Users
+      </Typography>
       <TableContainer>
         <Table>
           <TableHead>
@@ -23,8 +26,10 @@ const UserList = ({ users }) => {
           </TableHead>
           <TableBody>
             {users.map((user) => (
-              <TableRow>
-                <TableCell>{user.name}</TableCell>
+              <TableRow key={user.id}>
+                <TableCell>
+                  <Link to={`/users/${user.id}`}>{user.name}</Link>
+                </TableCell>
                 <TableCell>{user.username}</TableCell>
                 <TableCell>{user.blogs.length}</TableCell>
               </TableRow>
