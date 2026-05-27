@@ -1,10 +1,13 @@
-import Togglable from './Togglable'
-import blogService from '../services/blogs'
 import { useNavigate } from 'react-router-dom'
 import { Paper, Typography, Button } from '@mui/material'
+import { useNotifActions } from '../notificationStore'
+import { useBlogUser, useBlogActions } from '../blogStore'
 
-const Blog = ({ user, blog, setBlogs, blogs, testLike }) => {
+const Blog = ({ blog, testLike }) => {
   const navigate = useNavigate()
+  const { setAlert } = useNotifActions()
+  const { like: addLike, delBlog } = useBlogActions()
+  const user = useBlogUser()
 
   if (!blog) {
     return null
@@ -16,22 +19,14 @@ const Blog = ({ user, blog, setBlogs, blogs, testLike }) => {
     paddingBottom: 10,
   }
 
-  const addLike = async () => {
-    const updatedBlog = { ...blog, likes: blog.likes + 1 }
-    const returnedBlog = await blogService.update(blog.id, updatedBlog)
-    const updatedBlogs = blogs.map((b) =>
-      b.id === blog.id ? { ...returnedBlog, user: blog.user } : b,
-    )
-    setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-  }
-
-  const deleteBlog = async () => {
+  const handleDel = async () => {
     const confirm = window.confirm('Delete Blog?')
     if (!confirm) {
       return
     }
-    await blogService.del(blog.id)
-    setBlogs(blogs.filter((b) => b.id !== blog.id))
+    delBlog(blog.id)
+    setAlert(`Deleted ${blog.title}`, 'success')
+    setTimeout(() => setAlert(null), 5000)
     navigate('/')
   }
 
@@ -49,7 +44,7 @@ const Blog = ({ user, blog, setBlogs, blogs, testLike }) => {
         <Typography sx={{ marginTop: 1 }}>{blog.likes} Likes</Typography>
         {user && (
           <Button
-            onClick={testLike || addLike}
+            onClick={testLike || (() => addLike(blog))}
             variant="outlined"
             sx={{
               marginRight: 1,
@@ -63,7 +58,7 @@ const Blog = ({ user, blog, setBlogs, blogs, testLike }) => {
         )}
         {user && blog.user.id === user.id && (
           <Button
-            onClick={deleteBlog}
+            onClick={handleDel}
             variant="outlined"
             sx={{ marginTop: 1, borderColor: 'rgb(255, 0, 0)', borderWidth: 2 }}
           >

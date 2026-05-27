@@ -3,11 +3,16 @@ import loginService from '../services/login'
 import blogService from '../services/blogs'
 import { useNavigate } from 'react-router-dom'
 import { Button, TextField } from '@mui/material'
+import { useNotifActions } from '../notificationStore'
+import { useBlogActions } from '../blogStore'
 
-const LoginForm = ({ setUser, setAlert }) => {
+
+const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
+  const { setAlert } = useNotifActions()
+  const { setUser } = useBlogActions()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -21,10 +26,7 @@ const LoginForm = ({ setUser, setAlert }) => {
       setPassword('')
       navigate('/')
     } catch {
-      setAlert({
-        message: 'Invalid username or password',
-        type: 'error',
-      })
+      setAlert('Invalid username or password', 'error')
       setTimeout(() => {
         setAlert(null)
       }, 5000)
