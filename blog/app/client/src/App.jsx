@@ -1,6 +1,5 @@
 import './index.css'
 import { useContext, useEffect } from 'react'
-import blogService from './services/blogs'
 import { Routes, Route, Link, useMatch } from 'react-router-dom'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
@@ -11,22 +10,21 @@ import Notification from './components/Notification'
 import ErrorBoundary from './ErrorBoundary'
 import { useBlogs } from './hooks/useBlogs'
 import BlogContext from './BlogContext'
+import { getUser, removeUser } from './services/persistentUser'
 
 const App = () => {
   const { blogs, isPending } = useBlogs()
   const { user, setUser } = useContext(BlogContext)
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+    const savedUser = getUser()
+    if (savedUser) {
+      setUser(savedUser)
     }
   }, [setUser])
 
   const logout = () => {
-    window.localStorage.removeItem('loggedUser')
+    removeUser()
     setUser(null)
   }
 
