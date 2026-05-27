@@ -1,5 +1,3 @@
-import userService from '../services/users'
-import { useState, useEffect } from 'react'
 import {
   Table,
   TableBody,
@@ -10,13 +8,7 @@ import {
   Typography,
 } from '@mui/material'
 
-const UserList = () => {
-  const [users, setUsers] = useState([])
-
-  useEffect(() => {
-    userService.getAll().then((users) => setUsers(users))
-  }, [])
-
+const UserList = ({ users }) => {
   return (
     <div>
       <Typography variant='h5' sx={{ marginTop: 2 }}>Users</Typography>
