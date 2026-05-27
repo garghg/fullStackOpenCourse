@@ -27,6 +27,12 @@ const useBlogStore = create((set) => ({
         blogs: state.blogs.filter((b) => b.id !== id),
       }))
     },
+    addComment: async (id, comment) => {
+      const updatedBlog = await blogService.comment(id, comment)
+      set((state) => ({
+        blogs: state.blogs.map((b) => (b.id === id ? updatedBlog : b)),
+      }))
+    },
   },
 }))
 

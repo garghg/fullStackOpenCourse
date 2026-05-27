@@ -1,13 +1,16 @@
 import { useNavigate } from 'react-router-dom'
-import { Paper, Typography, Button } from '@mui/material'
+import { Paper, Typography, Button, TextField } from '@mui/material'
 import { useNotifActions } from '../notificationStore'
 import { useBlogUser, useBlogActions } from '../blogStore'
+import { useField } from '../hooks/useField'
 
 const Blog = ({ blog, testLike }) => {
   const navigate = useNavigate()
   const { setAlert } = useNotifActions()
-  const { like: addLike, delBlog } = useBlogActions()
+  const { like: addLike, delBlog, addComment } = useBlogActions()
   const user = useBlogUser()
+  const { reset: resetComment, ...newComment } = useField()
+
 
   if (!blog) {
     return null
@@ -28,6 +31,12 @@ const Blog = ({ blog, testLike }) => {
     setAlert(`Deleted ${blog.title}`, 'success')
     setTimeout(() => setAlert(null), 5000)
     navigate('/')
+  }
+
+  const handleComment = event => {
+    event.preventDefault()
+    addComment(blog.id, newComment.value)
+    resetComment()
   }
 
   const fontColor = 'rgb(138, 131, 129)'
@@ -65,6 +74,28 @@ const Blog = ({ blog, testLike }) => {
             Delete
           </Button>
         )}
+        <Typography sx={{ marginTop: 1 }} variant="h6">
+          Comments
+        </Typography>
+        {user && (
+          <form onSubmit={handleComment}>
+            <TextField
+              sx={{ marginBottom: 1, marginRight: 1 }}
+              variant="outlined"
+              size="small"
+              placeholder="add a comment"
+              {...newComment}
+            />
+            <Button variant="contained" type="submit">
+              Add
+            </Button>
+          </form>
+        )}
+        <ul>
+          {blog.comments.map((c) => (
+            <li key={c.id}>{c.content}</li>
+          ))}
+        </ul>
       </div>
     </Paper>
   )
