@@ -1,8 +1,11 @@
 import { Paper, Typography, Button } from '@mui/material'
 import { useBlogs } from '../hooks/useBlogs'
+import { useContext } from 'react'
+import BlogContext from '../BlogContext'
 
-const Blog = ({ user, blog, testLike }) => {
+const Blog = ({ blog, testLike }) => {
   const { likeBlog, deleteBlog }= useBlogs()
+  const { user } = useContext(BlogContext)
 
   if (!blog) {
     return null

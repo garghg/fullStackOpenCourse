@@ -1,5 +1,5 @@
 import './index.css'
-import { useState, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import blogService from './services/blogs'
 import { Routes, Route, Link, useMatch } from 'react-router-dom'
 import BlogList from './components/BlogList'
@@ -10,10 +10,11 @@ import { Container, AppBar, Button, Toolbar, Typography } from '@mui/material'
 import Notification from './components/Notification'
 import ErrorBoundary from './ErrorBoundary'
 import { useBlogs } from './hooks/useBlogs'
+import BlogContext from './BlogContext'
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const { blogs, isPending } = useBlogs()
+  const { user, setUser } = useContext(BlogContext)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -22,7 +23,7 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [setUser])
 
   const logout = () => {
     window.localStorage.removeItem('loggedUser')
@@ -104,7 +105,6 @@ const App = () => {
             element={
               <ErrorBoundary>
                 <Blog
-                  user={user}
                   blog={blog}
                 />
               </ErrorBoundary>

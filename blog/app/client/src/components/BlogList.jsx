@@ -1,8 +1,14 @@
+import { useContext } from 'react'
 import Blog from './Blog'
 import BlogForm from './BlogForm'
 import { Link } from 'react-router-dom'
+import BlogContext from '../BlogContext'
+import { useBlogs } from '../hooks/useBlogs'
 
-const BlogList = ({ user, blogs }) => {
+const BlogList = () => {
+  const { user } = useContext(BlogContext)
+  const { blogs } = useBlogs()
+
   return (
     <div>
       <h2>Blogs</h2>

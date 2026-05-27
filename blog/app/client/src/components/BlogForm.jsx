@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { TextField, Button } from '@mui/material'
-import NotifContext from '../notifContext'
+import BlogContext from '../BlogContext'
 import { useBlogs } from '../hooks/useBlogs'
 
 const BlogForm = ({ testAdd }) => {

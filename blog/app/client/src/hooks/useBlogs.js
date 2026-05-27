@@ -1,12 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import blogService from '../services/blogs'
 import { useContext } from 'react'
-import NotifContext from '../notifContext'
+import BlogContext from '../BlogContext'
 import { useNavigate } from 'react-router-dom'
 
 export const useBlogs = () => {
   const queryClient = useQueryClient()
-  const { setAlert } = useContext(NotifContext)
+  const { setAlert } = useContext(BlogContext)
   const navigate = useNavigate()
 
   const result = useQuery({
@@ -18,8 +18,7 @@ export const useBlogs = () => {
   const addMutation = useMutation({
     mutationFn: blogService.create,
     onSuccess: (newBlog) => {
-      const blogs = queryClient.getQueryData(['blogs'])
-      queryClient.setQueryData(['blogs'], blogs.concat(newBlog))
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
       setAlert({ message: `Added ${newBlog.title}`, type: 'success' })
       setTimeout(() => setAlert(null), 5000)
     },
