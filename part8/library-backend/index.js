@@ -1,6 +1,6 @@
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
-const { v1: uuid } = require('uuid')
+const { v1: uuid } = require("uuid");
 
 let authors = [
   {
@@ -110,6 +110,8 @@ const typeDefs = /* GraphQL */ `
       published: Int
       genres: [String!]!
     ): Book
+
+    editAuthor(name: String!, setBornTo: Int!): Author
   }
 `;
 
@@ -139,18 +141,22 @@ const resolvers = {
 
   Mutation: {
     addBook: (root, args) => {
-      const book = { ...args, id: uuid() }
-      books = books.concat(book)
-      return book
-    }
-  }
-  // Book: {
-  //   author: (root) => {
-  //     return {
-  //       name: root.name,
-  //     };
-  //   },
-  // },
+      const book = { ...args, id: uuid() };
+      if (authors.filter(a => a.name === args.author).length === 0) {
+        const newAuthor = { name: args.author, id: uuid() }
+        authors = authors.concat(newAuthor)
+      }
+      books = books.concat(book);
+      return book;
+    },
+    editAuthor: (root, args) => {
+      const author = authors.find((a) => a.name === args.name);
+      if (!author) return null;
+      const updatedAuthor = { ...author, born: args.setBornTo };
+      authors = authors.map((a) => (a.name === args.name ? updatedAuthor : a));
+      return updatedAuthor;
+    },
+  },
 };
 
 const server = new ApolloServer({
