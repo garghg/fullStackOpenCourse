@@ -88,14 +88,14 @@ const typeDefs = /* GraphQL */ `
   type Book {
     title: String!
     published: Int
-    author: Author!
+    author: String!
     genres: [String!]
   }
 
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks(author: String): [Book!]!
+    allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
 `;
@@ -104,7 +104,15 @@ const resolvers = {
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: (root, args) => args.author ? books.filter(b => b.author === args.author) : books,
+    allBooks: (root, args) => {
+      const byAuthor = args.author
+        ? books.filter((b) => b.author === args.author)
+        : books;
+      const byGenre = args.genre
+        ? byAuthor.filter((b) => b.genres.includes(args.genre))
+        : books;
+      return byGenre;
+    },
     allAuthors: () => {
       return authors.map((a) => ({
         name: a.name,
@@ -115,13 +123,13 @@ const resolvers = {
       }));
     },
   },
-  Book: {
-    author: (root) => {
-      return {
-        name: root.name,
-      };
-    },
-  },
+  // Book: {
+  //   author: (root) => {
+  //     return {
+  //       name: root.name,
+  //     };
+  //   },
+  // },
 };
 
 const server = new ApolloServer({
