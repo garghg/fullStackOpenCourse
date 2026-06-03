@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ADD_BOOK, GET_BOOKS } from '../../queries'
+import { ADD_BOOK, GET_BOOKS, GET_AUTHORS } from '../../queries'
 import { useMutation } from '@apollo/client/react'
 
 const NewBook = () => {
@@ -9,13 +9,15 @@ const NewBook = () => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
   const [addBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: GET_BOOKS }]
+    refetchQueries: [{ query: GET_BOOKS }, { query: GET_AUTHORS }],
   })
 
   const submit = async (event) => {
     event.preventDefault()
 
-    addBook({ variables: {title, author, published: Number(published), genres} })
+    addBook({
+      variables: { title, author, published: Number(published), genres },
+    })
 
     setTitle('')
     setPublished('')
@@ -33,32 +35,41 @@ const NewBook = () => {
     <div>
       <form onSubmit={submit}>
         <div>
-          title
-          <input
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
+          <label>
+            title
+            <input
+              value={title}
+              onChange={({ target }) => setTitle(target.value)}
+            />
+          </label>
         </div>
         <div>
-          author
-          <input
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
+          <label>
+            author
+            <input
+              value={author}
+              onChange={({ target }) => setAuthor(target.value)}
+            />
+          </label>
         </div>
         <div>
-          published
-          <input
-            type="number"
-            value={published}
-            onChange={({ target }) => setPublished(target.value)}
-          />
+          <label>
+            published
+            <input
+              type="number"
+              value={published}
+              onChange={({ target }) => setPublished(target.value)}
+            />
+          </label>
         </div>
         <div>
-          <input
-            value={genre}
-            onChange={({ target }) => setGenre(target.value)}
-          />
+          <label>
+            genre
+            <input
+              value={genre}
+              onChange={({ target }) => setGenre(target.value)}
+            />
+          </label>
           <button onClick={addGenre} type="button">
             add genre
           </button>
