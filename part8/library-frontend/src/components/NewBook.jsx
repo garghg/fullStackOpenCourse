@@ -16,7 +16,7 @@ const NewBook = () => {
     event.preventDefault()
 
     addBook({
-      variables: { title, author, published: Number(published), genres },
+      variables: { title, author, published: parseInt(published), genres },
     })
 
     setTitle('')
