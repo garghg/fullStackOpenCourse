@@ -108,7 +108,7 @@ const resolvers = {
       const updatedPerson = { ...person, phone: args.phone };
       persons = persons.map((p) => (p.name === args.name ? updatedPerson : p));
       return updatedPerson;
-    },2486
+    },
   },
 };
 
