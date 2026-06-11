@@ -2,7 +2,7 @@ const { GraphQLError } = require('graphql')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const jwt = require('jsonwebtoken')
-const User = require('./models/User')
+const User = require('./models/user')
 
 const resolvers = {
   Query: {
@@ -21,10 +21,10 @@ const resolvers = {
     allAuthors: async () => {
       const authors = await Author.find({})
       return Promise.all(
-        authors.map(async (a) => ({
-          ...a.toJSON(),
-          bookCount: await Book.countDocuments({ author: a._id }),
-        })),
+        authors.map(async (a) => {
+          const bookCount = await Book.countDocuments({ author: a._id })
+          return { ...a.toJSON(), bookCount }
+        }),
       )
     },
     me: (root, args, context) => {
@@ -92,7 +92,10 @@ const resolvers = {
       return updatedAuthor
     },
     createUser: async (root, args) => {
-      const user = new User({ username: args.username })
+      const user = new User({
+        username: args.username,
+        favoriteGenre: args.favoriteGenre,
+      })
 
       return user.save().catch((error) => {
         throw new GraphQLError(`Create new user failed: ${error.message}`, {
@@ -107,7 +110,7 @@ const resolvers = {
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username })
 
-      if (!user || args.password !== 'password') {
+      if (!user || args.password !== 'secret') {
         throw new GraphQLError('Invalid username or password', {
           extensions: {
             code: 'BAD_USER_INPUT',
@@ -121,6 +124,15 @@ const resolvers = {
       }
 
       return { value: jwt.sign(userToken, process.env.JWT_SECRET) }
+    },
+    _resetDatabase: async () => {
+      if (process.env.NODE_ENV !== 'test') {
+        throw new GraphQLError('_resetDatabase is only available in test mode')
+      }
+      await Author.deleteMany({})
+      await Book.deleteMany({})
+      await User.deleteMany({})
+      return true
     },
   },
 }
