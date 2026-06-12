@@ -20,7 +20,7 @@ const Books = () => {
   return (
     <div>
       <h2>books</h2>
-
+      {genre && <p>in genre <strong>{genre}</strong></p>}
       <table>
         <tbody>
           <tr>
@@ -37,7 +37,7 @@ const Books = () => {
           ))}
         </tbody>
       </table>
-      <button onClick={() => setGenre(null)}>All</button>
+      <button onClick={() => setGenre(null)}>all genres</button>
       {genreList.map((g) => (
         <button onClick={() => setGenre(g)} key={g}>
           {g}

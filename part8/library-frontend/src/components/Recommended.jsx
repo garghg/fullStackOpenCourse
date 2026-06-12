@@ -14,8 +14,8 @@ const Recommended = () => {
   const books = booksResult.data.allBooks
   return (
     <div>
-      <h2>Recommendations</h2>
-      <p>You favourite genre is {favGenre}, so you might like:</p>
+      <h2>recommendations</h2>
+      <p>books in your favorite genre <strong>{favGenre}</strong></p>
       <table>
         <tbody>
           <tr>

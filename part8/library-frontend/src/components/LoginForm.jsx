@@ -5,23 +5,29 @@ import { LOGIN } from '../../queries'
 const LoginForm = ({ setToken, setPage }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
   const [login] = useMutation(LOGIN, {
     onCompleted: (data) => {
       const token = data.login.value
       setToken(token)
       localStorage.setItem('loggedInUser', token)
+      setPage('authors')
+    },
+    onError: () => {
+      setError('login failed')
     },
   })
 
   const handleLogin = (e) => {
     e.preventDefault()
+    setError(null)
     login({ variables: { username, password } })
-    setPage('authors')
   }
 
   return (
     <div>
       <h2>Login</h2>
+      {error && <div>{error}</div>}
       <form onSubmit={handleLogin}>
         <div>
           <label>
