@@ -4,6 +4,7 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import { GET_AUTHORS, GET_BOOKS } from '../queries'
 import LoginForm from './components/LoginForm'
+import Recommended from './components/Recommended'
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem('loggedInUser'))
@@ -21,6 +22,7 @@ const App = () => {
         <button onClick={() => setPage('books')}>books</button>
         {token && <button onClick={() => setPage('add')}>add book</button>}
         {!token &&  <button onClick={() => setPage('login')}>login</button>}
+        {token && <button onClick={() => setPage('recommended')}>recommended</button>}
         {token && <button onClick={logout}>logout</button>}
       </div>
 
@@ -32,6 +34,7 @@ const App = () => {
 
       {page === 'add' && <NewBook />}
       {page === 'login' && <LoginForm setToken={setToken} setPage={setPage} />}
+      {page === 'recommended' && <Recommended />}
     </div>
   )
 }
