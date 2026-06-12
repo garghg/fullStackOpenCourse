@@ -6,6 +6,7 @@ const Books = () => {
   const [genre, setGenre] = useState(null)
   const booksResult = useQuery(GET_BOOKS, {
     variables: { genre },
+    fetchPolicy: 'cache-and-network',
   })
   const genreResult = useQuery(GET_GENRES)
 
