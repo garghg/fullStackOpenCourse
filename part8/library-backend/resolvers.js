@@ -27,6 +27,10 @@ const resolvers = {
         }),
       )
     },
+    allGenres: async () => {
+      const genres = await Book.distinct('genres')
+      return genres
+    },
     me: (root, args, context) => {
       return context.currentUser
     },

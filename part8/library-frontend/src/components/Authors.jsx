@@ -1,20 +1,12 @@
-import { useState } from 'react'
-import { SET_BIRTH } from '../../queries'
-import { useMutation } from '@apollo/client/react'
+import { GET_AUTHORS } from '../../queries'
+import AuthorForm from './AuthorForm'
+import { useQuery } from '@apollo/client/react'
 
-const Authors = ({ authors, token }) => {
-  const [year, setYear] = useState('')
-  const [name, setName] = useState(authors[0].name)
-  const [editAuthor] = useMutation(SET_BIRTH, {
-    onError: (error) => {
-      console.log('mutation error:', error)
-    },
-  })
+const Authors = ({ token }) => {
+  const authorResult = useQuery(GET_AUTHORS)
 
-  const handleBirthEdit = (event) => {
-    event.preventDefault()
-    editAuthor({ variables: { name, setBornTo: parseInt(year) } })
-  }
+  if (authorResult.loading) return <div>loading...</div>
+  const authors = authorResult.data.allAuthors
 
   return (
     <div>
@@ -35,34 +27,7 @@ const Authors = ({ authors, token }) => {
           ))}
         </tbody>
       </table>
-      {token && <form onSubmit={handleBirthEdit}>
-        <h3>Set Birth Year</h3>
-        <div>
-          <label>
-            Name
-            <select onChange={(event) => setName(event.target.value)}>
-              {authors.map((a) => (
-                <option value={a.name} key={a.id}>
-                  {a.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Born
-            <input
-              type="text"
-              placeholder="Enter new birth year"
-              onChange={(event) => setYear(event.target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <button type="submit">Update author</button>
-        </div>
-      </form>}
+      {token && <AuthorForm authors={authorResult.data.allAuthors} />}
     </div>
   )
 }
