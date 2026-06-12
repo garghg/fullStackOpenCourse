@@ -2,10 +2,14 @@ import { useState } from 'react'
 import { SET_BIRTH } from '../../queries'
 import { useMutation } from '@apollo/client/react'
 
-const Authors = ({ authors }) => {
+const Authors = ({ authors, token }) => {
   const [year, setYear] = useState('')
   const [name, setName] = useState(authors[0].name)
-  const [editAuthor] = useMutation(SET_BIRTH)
+  const [editAuthor] = useMutation(SET_BIRTH, {
+    onError: (error) => {
+      console.log('mutation error:', error)
+    },
+  })
 
   const handleBirthEdit = (event) => {
     event.preventDefault()
@@ -31,8 +35,8 @@ const Authors = ({ authors }) => {
           ))}
         </tbody>
       </table>
-      <h3>Set Birth Year</h3>
-      <form onSubmit={handleBirthEdit}>
+      {token && <form onSubmit={handleBirthEdit}>
+        <h3>Set Birth Year</h3>
         <div>
           <label>
             Name
@@ -58,7 +62,7 @@ const Authors = ({ authors }) => {
         <div>
           <button type="submit">Update author</button>
         </div>
-      </form>
+      </form>}
     </div>
   )
 }

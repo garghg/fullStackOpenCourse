@@ -10,6 +10,9 @@ const NewBook = () => {
   const [genres, setGenres] = useState([])
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: GET_BOOKS }, { query: GET_AUTHORS }],
+    onError: (error) => {
+      console.log('mutation error:', error)
+    },
   })
 
   const submit = async (event) => {
