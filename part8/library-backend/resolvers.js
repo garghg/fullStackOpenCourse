@@ -23,12 +23,16 @@ const resolvers = {
     },
     allAuthors: async () => {
       const authors = await Author.find({})
-      return Promise.all(
-        authors.map(async (a) => {
-          const bookCount = await Book.countDocuments({ author: a._id })
-          return { ...a.toJSON(), bookCount }
-        }),
+      const countsArray = await Book.aggregate([
+        { $group: { _id: '$author', bookCount: { $sum: 1 } } },
+      ])
+      const countsMap = new Map(
+        countsArray.map((c) => [c._id.toString(), c.bookCount]),
       )
+      return authors.map((a) => ({
+        ...a.toJSON(),
+        bookCount: countsMap.get(a._id.toString()) || 0,
+      }))
     },
     allGenres: async () => {
       const genres = await Book.distinct('genres')
@@ -146,9 +150,9 @@ const resolvers = {
   },
   Subscription: {
     bookAdded: {
-      subscribe: () => pubsub.asyncIterableIterator('BOOK_ADDED')
-    }
-  }
+      subscribe: () => pubsub.asyncIterableIterator('BOOK_ADDED'),
+    },
+  },
 }
 
 module.exports = resolvers
