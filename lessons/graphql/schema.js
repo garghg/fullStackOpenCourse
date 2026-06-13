@@ -1,25 +1,30 @@
 const typeDefs = /* GraphQL */ `
+  type Subscription {
+    personAdded: Person!
+  }
+
   type Address {
     street: String!
     city: String!
-  }
-
-  type Person {
-    name: String!
-    phone: String
-    address: Address!
-    id: ID!
-  }
-
-  enum YesNo {
-    YES
-    NO
   }
 
   type User {
     username: String!
     friends: [Person!]!
     id: ID!
+  }
+
+  type Person {
+    name: String!
+    phone: String
+    address: Address!
+    friendOf: [User!]!
+    id: ID!
+  }
+
+  enum YesNo {
+    YES
+    NO
   }
 
   type Token {

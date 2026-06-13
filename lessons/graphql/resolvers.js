@@ -2,16 +2,22 @@ const { GraphQLError } = require('graphql')
 const Person = require('./models/person')
 const jwt = require('jsonwebtoken')
 const User = require('./models/user')
+const { PubSub } = require('graphql-subscriptions')
+
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
     personCount: async () => Person.collection.countDocuments(),
-    allPersons: async (root, args) => {
+    allPersons: (root, args) => {
+      console.log('Person.find')
       if (!args.phone) {
-        return Person.find({})
+        return Person.find({}).populate('friendOf')
       }
 
-      return Person.find({ phone: { $exists: args.phone === 'YES' } })
+      return Person.find({ phone: { $exists: args.phone === 'YES' } }).populate(
+        'friendOf',
+      )
     },
     findPerson: async (root, args) => Person.findOne({ name: args.name }),
     me: (root, args, context) => {
@@ -24,7 +30,7 @@ const resolvers = {
         street,
         city,
       }
-    },
+    }
   },
   Mutation: {
     addPerson: async (root, args, context) => {
@@ -65,8 +71,11 @@ const resolvers = {
         })
       }
 
+      pubsub.publish('PERSON_ADDED', { personAdded: person })
+
       return person
     },
+
     editNumber: async (root, args) => {
       const person = await Person.findOne({ name: args.name })
 
@@ -150,6 +159,12 @@ const resolvers = {
       await currentUser.save()
 
       return currentUser
+    },
+  },
+
+  Subscription: {
+    personAdded: {
+      subscribe: () => pubsub.asyncIterableIterator('PERSON_ADDED'),
     },
   },
 }
