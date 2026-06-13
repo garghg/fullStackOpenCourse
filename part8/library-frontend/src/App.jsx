@@ -19,12 +19,12 @@ const App = () => {
   }
 
   useSubscription(BOOK_ADDED, {
-    onData: ({ data }) => {
-      const addedBook = data.data.bookAdded
-      window.alert(`${addedBook.title} added`)
-      addBookToCache(client.cache, addedBook)
-    }
-  })
+  onData: ({ data }) => {
+    const addedBook = data.data.bookAdded
+    window.alert(`${addedBook.title} added`)
+    addBookToCache(client.cache, addedBook)
+  }
+})
 
   return (
     <div>
